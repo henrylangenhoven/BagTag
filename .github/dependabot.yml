@@ -14,15 +14,13 @@ updates:
       angular-version:
         patterns:
           - '@angular*'
-      major:
+      npm-dependencies:
         update-types:
           - major
-        exclude-patterns:
-          - '@angular*'
-      minor-patch:
-        update-types:
           - minor
           - patch
+        exclude-patterns:
+          - '@angular*'
   - package-ecosystem: docker
     directory: '/'
     schedule:
