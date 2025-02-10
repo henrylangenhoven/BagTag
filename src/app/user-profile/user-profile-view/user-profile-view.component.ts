@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile-view',
-  standalone: true,
   imports: [FormsModule, RouterLink],
   templateUrl: './user-profile-view.component.html',
   styleUrl: './user-profile-view.component.scss',

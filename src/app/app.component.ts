@@ -8,7 +8,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterOutlet, NgForOf, AsyncPipe, QrCodeComponent, FormsModule, RouterLink, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

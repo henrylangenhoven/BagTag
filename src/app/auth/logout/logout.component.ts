@@ -4,7 +4,6 @@ import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-logout',
-  standalone: true,
   imports: [NgIf],
   templateUrl: './logout.component.html',
   styleUrl: './logout.component.scss',
