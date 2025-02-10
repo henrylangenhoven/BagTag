@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { QRCodeErrorCorrectionLevel, QRCodeModule } from 'angularx-qrcode';
+import { QRCodeErrorCorrectionLevel, QRCodeComponent } from 'angularx-qrcode';
 
 @Component({
   selector: 'app-qr-code',
-  standalone: true,
-  imports: [QRCodeModule],
+  imports: [QRCodeComponent],
   templateUrl: './qr-code.component.html',
   styleUrl: './qr-code.component.scss',
 })

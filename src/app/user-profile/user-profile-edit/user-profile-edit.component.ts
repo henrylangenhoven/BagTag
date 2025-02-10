@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile-edit',
-  standalone: true,
   imports: [FormsModule],
   templateUrl: './user-profile-edit.component.html',
   styleUrl: './user-profile-edit.component.scss',

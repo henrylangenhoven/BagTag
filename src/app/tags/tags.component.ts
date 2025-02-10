@@ -8,7 +8,6 @@ import { Tag } from '@models/tag';
 
 @Component({
   selector: 'app-tags',
-  standalone: true,
   imports: [AsyncPipe, FormsModule, NgForOf, QrCodeComponent],
   templateUrl: './tags.component.html',
   styleUrl: './tags.component.scss',
