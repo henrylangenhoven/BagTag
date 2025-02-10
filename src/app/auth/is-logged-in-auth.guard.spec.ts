@@ -21,9 +21,7 @@ describe('isLoggedInAuthGuard', () => {
   it('should allow access if a user is logged in', done => {
     authServiceMock.currentUser$ = of({ uid: '12345' }); // Simulate logged-in user
 
-    const result = TestBed.runInInjectionContext(() =>
-      isLoggedInAuthGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
-    ) as Observable<boolean>;
+    const result = TestBed.runInInjectionContext(() => isLoggedInAuthGuard()) as Observable<boolean>;
 
     result.subscribe(result => {
       expect(result).toBeTrue();
@@ -36,9 +34,7 @@ describe('isLoggedInAuthGuard', () => {
     // Setup for this specific test
     authServiceMock.currentUser$ = of(null); // No user logged in
 
-    const result = TestBed.runInInjectionContext(() =>
-      isLoggedInAuthGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
-    ) as Observable<boolean>;
+    const result = TestBed.runInInjectionContext(() => isLoggedInAuthGuard()) as Observable<boolean>;
 
     result.subscribe(result => {
       expect(result).toBeFalse();
