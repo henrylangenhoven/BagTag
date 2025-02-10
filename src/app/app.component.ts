@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
-import { QrCodeComponent } from '@app/utils/qr-code/qr-code/qr-code.component';
+import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '@app/firebase/auth/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgForOf, AsyncPipe, QrCodeComponent, FormsModule, RouterLink, NgIf],
+  imports: [RouterOutlet, FormsModule, RouterLink, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
