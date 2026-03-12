@@ -49,6 +49,10 @@ Angular SPA providing:
 
 Served by an nginx container.
 
+Frontend-to-backend calls use a generated Angular client from `ng-openapi-gen`. The checked-in
+OpenAPI source of truth for the frontend lives at `openapi/bagtag-api.json`, refreshed from the
+backend's `/v3/api-docs` endpoint.
+
 #### API
 
 Kotlin Spring Boot application responsible for:
@@ -174,11 +178,16 @@ Planned structure under `apps/web/src/app`:
 
 ```text
 core/
+generated/
 features/auth/
 features/owner/
 features/public-tag/
 shared/
 ```
+
+`generated/` contains checked-in `ng-openapi-gen` output. Feature and core code should wrap that
+generated client with application-specific state and UI behavior, using RxJS observables and Angular
+signals where appropriate instead of ad hoc HTTP calls.
 
 ## Domain Model
 
@@ -281,6 +290,10 @@ MVP controls:
 - `POST /api/auth/magic-link/consume`
 - `POST /api/auth/logout`
 - `GET /api/auth/me`
+
+OpenAPI docs are exposed from the backend at:
+
+- `GET /v3/api-docs`
 
 ### Owner
 

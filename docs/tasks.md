@@ -36,6 +36,7 @@ This is the working backlog for the BagTag MVP.
 - [x] Add health endpoint
 - [x] Add Dockerfile
 - [x] Create package structure
+- [x] Expose OpenAPI docs
 
 ## Milestone 2: Frontend Bootstrap
 
@@ -45,6 +46,8 @@ This is the working backlog for the BagTag MVP.
 - [x] Add API client layer
 - [x] Add nginx config
 - [x] Add Dockerfile
+- [x] Add checked-in OpenAPI spec
+- [x] Add `ng-openapi-gen` client generation
 
 ## Milestone 3: Database
 
