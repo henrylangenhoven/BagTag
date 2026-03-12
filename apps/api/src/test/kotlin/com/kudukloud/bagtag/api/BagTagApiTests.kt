@@ -50,7 +50,7 @@ class BagTagApiTests {
         restClient()
             .post()
             .uri("/api/auth/magic-link/consume")
-            .body(MagicLinkConsumeRequest(token = requestBody.previewToken!!))
+            .body(MagicLinkConsumeRequest(token = requestBody.previewToken))
             .retrieve()
             .toEntity(SessionResponse::class.java)
 
