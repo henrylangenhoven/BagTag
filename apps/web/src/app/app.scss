@@ -58,12 +58,16 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 
-  a {
+  a,
+  .nav-button {
     padding: 0.65rem 0.95rem;
     border-radius: 999px;
     color: #4d3520;
     text-decoration: none;
     background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
     transition:
       background-color 160ms ease,
       color 160ms ease,
@@ -71,7 +75,8 @@
   }
 
   a:hover,
-  a.active {
+  a.active,
+  .nav-button:hover {
     background: #4d3520;
     color: #fff7eb;
     transform: translateY(-1px);

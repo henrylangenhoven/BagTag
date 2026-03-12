@@ -17,7 +17,11 @@
       @if (showAboutLink()) {
         <a routerLink="/about" routerLinkActive="active">About</a>
       }
-      <a routerLink="/login" routerLinkActive="active">Login</a>
+      @if (showLogout()) {
+        <button type="button" class="nav-button" (click)="logout()">Log out</button>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+      }
     </nav>
   </header>
 
