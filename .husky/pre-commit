@@ -1,5 +1,12 @@
 #!/usr/bin/env sh
 
+if [ -z "${JAVA_HOME:-}" ] && [ -x "$HOME/.sdkman/candidates/java/current/bin/java" ]; then
+  JAVA_HOME=$(cd "$HOME/.sdkman/candidates/java/current" && pwd)
+  export JAVA_HOME
+  PATH="$JAVA_HOME/bin:$PATH"
+  export PATH
+fi
+
 if git diff --cached --name-only --diff-filter=ACMR -- 'apps/api' | grep -q .; then
   (
     cd apps/api || exit 1
