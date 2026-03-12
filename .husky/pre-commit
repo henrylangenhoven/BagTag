@@ -1,4 +1,14 @@
 #!/usr/bin/env sh
 
+if git diff --cached --name-only --diff-filter=ACMR -- 'apps/api' | grep -q .; then
+  (
+    cd apps/api || exit 1
+    ./gradlew spotlessApply
+  ) || exit 1
+
+  git add apps/api/build.gradle.kts
+  git add apps/api/src
+fi
+
 git diff --cached --name-only --diff-filter=ACMR -z -- 'apps/web' | xargs -0r ./apps/web/node_modules/.bin/prettier --write --ignore-unknown
 git diff --cached --name-only --diff-filter=ACMR -z -- 'apps/web' | xargs -0r git add --
