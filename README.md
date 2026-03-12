@@ -1,3 +1,5 @@
+![BagTag logo](apps/web/public/BagTag-Logo-Large.png)
+
 # BagTag
 
 BagTag is a self-hosted luggage tag system built around QR codes. A scanned tag should open a privacy-preserving public page where someone can report a bag's location without seeing the owner's identity, while the owner manages tags and scan history through an authenticated app.
