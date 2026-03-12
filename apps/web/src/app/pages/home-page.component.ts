@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <section class="hero">
       <div class="hero-copy">
-        <img class="hero-logo" src="/BagTag-Logo-Large.png" alt="BagTag luggage tag logo" />
+        <img class="hero-logo" src="/BagTag-Logo.png" alt="BagTag luggage tag logo" />
         <p class="eyebrow">Current MVP shape</p>
         <h1>Lost bag reporting without exposing the owner.</h1>
         <p class="lede">
