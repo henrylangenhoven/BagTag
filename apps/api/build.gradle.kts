@@ -45,6 +45,7 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.0")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter")
   implementation("org.springframework.boot:spring-boot-starter-web")
