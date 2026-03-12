@@ -196,7 +196,7 @@ export class AboutPageComponent {
   protected readonly isBackendConnected = computed(() => this.backendStatus().connected);
   protected readonly lastCheckedAt = computed(() => {
     const timestamp = this.backendStatus().health?.timestamp;
-    return timestamp ? new Date(timestamp).toLocaleString() : 'No successful check yet';
+    return timestamp ? formatTimestamp(timestamp) : 'No successful check yet';
   });
 
   private readonly healthApi = inject(HealthControllerService);
@@ -235,4 +235,27 @@ export class AboutPageComponent {
         },
       });
   }
+}
+
+function formatTimestamp(timestamp: string): string {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) {
+    return timestamp;
+  }
+
+  const parts = new Intl.DateTimeFormat('sv-SE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+
+  const values = Object.fromEntries(
+    parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]),
+  ) as Record<string, string>;
+
+  return `${values['year']}-${values['month']}-${values['day']} ${values['hour']}:${values['minute']}:${values['second']}`;
 }
