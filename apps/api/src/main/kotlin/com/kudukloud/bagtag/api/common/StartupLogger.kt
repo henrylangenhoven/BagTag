@@ -18,9 +18,9 @@ class StartupLogger {
     private val STARTUP_BANNER =
         """
 
-        === ------------------------------ ===
-        === BagTag API Application Started ===
-        === ------------------------------ ===
+        === ------------------------------- ===
+        *** BagTag API Started Successfully ***
+        === ------------------------------- ===
         """
             .trimIndent()
   }
