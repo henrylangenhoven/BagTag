@@ -43,6 +43,28 @@ npm start
 
 The Angular dev server runs at `http://localhost:4200`.
 
+Generated API client workflow:
+
+```bash
+cd apps/web
+npm run api:fetch
+npm run api:generate
+```
+
+Or in one step:
+
+```bash
+cd apps/web
+npm run api:sync
+```
+
+Notes:
+
+- The backend serves OpenAPI docs at `http://localhost:8080/v3/api-docs`
+- The checked-in OpenAPI document lives at `openapi/bagtag-api.json`
+- `ng-openapi-gen` generates the Angular client into `apps/web/src/app/generated/bagtag-api`
+- Frontend API integrations should use the generated client rather than hand-rolled `HttpClient` calls
+
 ### Backend
 
 Requirements:
