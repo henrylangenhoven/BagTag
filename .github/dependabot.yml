@@ -1,0 +1,110 @@
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 8
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "web"
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+      frontend-tooling:
+        patterns:
+          - "typescript"
+          - "prettier"
+          - "vitest"
+          - "jsdom"
+          - "ng-openapi-gen"
+          - "husky"
+      frontend-runtime:
+        patterns:
+          - "rxjs"
+          - "tslib"
+
+  - package-ecosystem: "gradle"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 8
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "api"
+    groups:
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+      spring:
+        patterns:
+          - "org.springframework.boot*"
+          - "io.spring.dependency-management"
+          - "org.springdoc*"
+      api-tooling:
+        patterns:
+          - "com.diffplug.spotless*"
+          - "org.junit*"
+          - "com.fasterxml.jackson*"
+
+  - package-ecosystem: "docker"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "web"
+      - "docker"
+    groups:
+      web-base-images:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "docker"
+    directory: "/apps/api"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "api"
+      - "docker"
+    groups:
+      api-base-images:
+        patterns:
+          - "*"
