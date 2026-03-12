@@ -69,6 +69,7 @@ import { AuthFacadeService } from '../core/auth/auth-facade.service';
     .hero,
     .card {
       display: grid;
+      min-width: 0;
       gap: 1rem;
       padding: 1.6rem;
       border-radius: var(--radius-xl);
@@ -88,12 +89,14 @@ import { AuthFacadeService } from '../core/auth/auth-facade.service';
     h1 {
       font-size: clamp(2.5rem, 5vw, 4.2rem);
       line-height: 0.96;
+      overflow-wrap: anywhere;
     }
 
     p,
     li {
       color: var(--muted);
       line-height: 1.7;
+      overflow-wrap: anywhere;
     }
 
     .actions {
@@ -131,6 +134,7 @@ import { AuthFacadeService } from '../core/auth/auth-facade.service';
 
     .stack {
       display: grid;
+      min-width: 0;
       gap: 1rem;
     }
 
