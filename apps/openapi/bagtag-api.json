@@ -248,6 +248,9 @@
           "service": {
             "type": "string"
           },
+          "version": {
+            "type": "string"
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -256,7 +259,8 @@
         "required": [
           "service",
           "status",
-          "timestamp"
+          "timestamp",
+          "version"
         ]
       },
       "MeResponse": {
