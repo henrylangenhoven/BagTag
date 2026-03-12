@@ -7,7 +7,7 @@ import { HealthControllerService } from '../generated/bagtag-api/services/health
 type BackendStatus = {
   loading: boolean;
   connected: boolean;
-  health: (HealthResponse & { version?: string }) | null;
+  health: HealthResponse | null;
   error: string;
 };
 
@@ -56,7 +56,7 @@ type BackendStatus = {
                 Service: <strong>{{ backendStatus().health?.service }}</strong>
               </p>
               <p>
-                Version: <strong>{{ backendStatus().health?.version ?? 'Unknown' }}</strong>
+                Version: <strong>{{ backendStatus().health?.version }}</strong>
               </p>
               <p>
                 Status: <strong>{{ backendStatus().health?.status }}</strong>

@@ -4,12 +4,14 @@
 
 BagTag is a self-hosted luggage tag system built around QR codes. A scanned tag should open a privacy-preserving public page where someone can report a bag's location without seeing the owner's identity, while the owner manages tags and scan history through an authenticated app.
 
-The repository is currently in the bootstrap stage. The core repo structure, docs, Angular app, Spring Boot app, Helm chart, and CI/deployment placeholders exist, but the product flows described in the architecture are not implemented yet.
+The repository now has working local auth, generated frontend API bindings, Dockerized app/runtime
+separation, and a Flyway-managed PostgreSQL schema. Tag management and public reporting flows are
+still in progress.
 
 ## Current State
 
-- `apps/web` is an Angular 21 app with the default starter screen and no feature routes yet.
-- `apps/api` is a Spring Boot 4 bootstrap app that starts successfully but does not expose BagTag-specific endpoints yet.
+- `apps/web` is an Angular 21 SPA with public, login, owner, and about routes.
+- `apps/api` is a Spring Boot 4 app with health, magic-link auth, session, and profile endpoints.
 - `deploy/` contains Helm and environment scaffolding, but the workflow and deployment scripts are still placeholders.
 - `docs/architecture.md` describes the intended product and system design.
 - `docs/tasks.md` tracks the MVP backlog.
@@ -64,6 +66,8 @@ Notes:
 - The checked-in OpenAPI document lives at `openapi/bagtag-api.json`
 - `ng-openapi-gen` generates the Angular client into `apps/web/src/app/generated/bagtag-api`
 - Frontend API integrations should use the generated client rather than hand-rolled `HttpClient` calls
+- Owner display names are editable through the owner area; when set, they take precedence over the
+  email address in the UI
 
 ### Backend
 

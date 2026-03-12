@@ -62,7 +62,9 @@ class AuthService(
     val session =
         Session(
             token = sessionToken,
+            userId = pending.userId,
             email = pending.email,
+            displayName = pending.displayName,
             createdAt = now,
         )
 
@@ -71,7 +73,7 @@ class AuthService(
 
     return SessionResponse(
         sessionToken = sessionToken,
-        user = AuthenticatedUser(email = session.email),
+        user = session.toAuthenticatedUser(),
     )
   }
 
@@ -80,8 +82,26 @@ class AuthService(
     return if (session == null) {
       MeResponse(authenticated = false, user = null)
     } else {
-      MeResponse(authenticated = true, user = AuthenticatedUser(email = session.email))
+      val user =
+          authRepository.findUserById(session.userId)
+              ?: return MeResponse(authenticated = false, user = null)
+      val refreshedSession = session.copy(email = user.email, displayName = user.displayName)
+      sessions[session.token] = refreshedSession
+      MeResponse(authenticated = true, user = refreshedSession.toAuthenticatedUser())
     }
+  }
+
+  @Transactional
+  fun updateProfile(sessionToken: String?, displayName: String?): ProfileResponse? {
+    val session =
+        sessionToken?.trim()?.takeIf { it.isNotEmpty() }?.let(sessions::get) ?: return null
+    val normalizedDisplayName = displayName?.trim()?.takeIf { it.isNotEmpty() }
+    authRepository.updateUserDisplayName(session.userId, normalizedDisplayName)
+    val updatedUser = authRepository.findUserById(session.userId) ?: return null
+    val updatedSession =
+        session.copy(email = updatedUser.email, displayName = updatedUser.displayName)
+    sessions[session.token] = updatedSession
+    return ProfileResponse(user = updatedSession.toAuthenticatedUser())
   }
 
   fun logout(sessionToken: String?): LogoutResponse {
@@ -114,6 +134,15 @@ class AuthService(
 
 private data class Session(
     val token: String,
+    val userId: UUID,
     val email: String,
+    val displayName: String?,
     val createdAt: Instant,
 )
+
+private fun Session.toAuthenticatedUser(): AuthenticatedUser {
+  return AuthenticatedUser(
+      email = email,
+      displayName = displayName,
+  )
+}

@@ -11,6 +11,47 @@
     }
   ],
   "paths": {
+    "/api/auth/profile": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Update the current authenticated user profile",
+        "operationId": "updateAuthProfile",
+        "parameters": [
+          {
+            "name": "X-BagTag-Session",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/magic-link/request": {
       "post": {
         "tags": [
@@ -158,6 +199,39 @@
   },
   "components": {
     "schemas": {
+      "UpdateProfileRequest": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticatedUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ProfileResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/AuthenticatedUser"
+          }
+        },
+        "required": [
+          "user"
+        ]
+      },
       "MagicLinkRequest": {
         "type": "object",
         "properties": {
@@ -200,17 +274,6 @@
         },
         "required": [
           "token"
-        ]
-      },
-      "AuthenticatedUser": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "email"
         ]
       },
       "SessionResponse": {

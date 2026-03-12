@@ -68,10 +68,11 @@ Tables:
 
 - [x] Request magic link endpoint
 - [x] Consume magic link endpoint
-- [ ] Token hashing
+- [x] Token hashing
 - [~] Session auth
 - [x] Auth check endpoint
 - [x] Logout endpoint
+- [x] Owner profile display name
 
 ## Milestone 5: Tag Management
 

@@ -21,6 +21,7 @@ class AuthRepository(
         UserRecord(
             id = UUID.randomUUID(),
             email = email,
+            displayName = null,
             createdAt = now,
             lastLoginAt = null,
         )
@@ -29,11 +30,14 @@ class AuthRepository(
       jdbcClient
           .sql(
               """
-              insert into users (id, email, created_at)
-              values (?, ?, ?)
+              insert into users (id, email, display_name, created_at)
+              values (:id, :email, :displayName, :createdAt)
               """
                   .trimIndent())
-          .params(user.id, user.email, timestamp(user.createdAt))
+          .param("id", user.id)
+          .param("email", user.email)
+          .param("displayName", user.displayName)
+          .param("createdAt", timestamp(user.createdAt))
           .update()
       return user
     } catch (_: DataIntegrityViolationException) {
@@ -64,7 +68,8 @@ class AuthRepository(
                    t.expires_at,
                    t.consumed_at,
                    t.created_at,
-                   u.email
+                   u.email,
+                   u.display_name
             from magic_link_tokens t
             join users u on u.id = t.user_id
             where t.token_hash = ?
@@ -107,6 +112,20 @@ class AuthRepository(
         .update()
   }
 
+  fun updateUserDisplayName(userId: UUID, displayName: String?) {
+    jdbcClient
+        .sql(
+            """
+            update users
+            set display_name = :displayName
+            where id = :id
+            """
+                .trimIndent())
+        .param("displayName", displayName)
+        .param("id", userId)
+        .update()
+  }
+
   fun purgeExpiredMagicLinks(now: Instant) {
     jdbcClient
         .sql(
@@ -123,7 +142,7 @@ class AuthRepository(
     return jdbcClient
         .sql(
             """
-            select id, email, created_at, last_login_at
+            select id, email, display_name, created_at, last_login_at
             from users
             where email = ?
             """
@@ -134,10 +153,26 @@ class AuthRepository(
         .orElse(null)
   }
 
+  fun findUserById(id: UUID): UserRecord? {
+    return jdbcClient
+        .sql(
+            """
+            select id, email, display_name, created_at, last_login_at
+            from users
+            where id = ?
+            """
+                .trimIndent())
+        .param(id)
+        .query(::mapUser)
+        .optional()
+        .orElse(null)
+  }
+
   private fun mapUser(resultSet: ResultSet, rowNum: Int): UserRecord {
     return UserRecord(
         id = resultSet.getObject("id", UUID::class.java),
         email = resultSet.getString("email"),
+        displayName = resultSet.getString("display_name"),
         createdAt = resultSet.getTimestamp("created_at").toInstant(),
         lastLoginAt = resultSet.getTimestamp("last_login_at")?.toInstant(),
     )
@@ -148,6 +183,7 @@ class AuthRepository(
         id = resultSet.getObject("id", UUID::class.java),
         userId = resultSet.getObject("user_id", UUID::class.java),
         email = resultSet.getString("email"),
+        displayName = resultSet.getString("display_name"),
         tokenHash = resultSet.getString("token_hash"),
         expiresAt = resultSet.getTimestamp("expires_at").toInstant(),
         consumedAt = resultSet.getTimestamp("consumed_at")?.toInstant(),
@@ -161,6 +197,7 @@ class AuthRepository(
 data class UserRecord(
     val id: UUID,
     val email: String,
+    val displayName: String?,
     val createdAt: Instant,
     val lastLoginAt: Instant?,
 )
@@ -169,6 +206,7 @@ data class MagicLinkTokenRecord(
     val id: UUID,
     val userId: UUID,
     val email: String,
+    val displayName: String?,
     val tokenHash: String,
     val expiresAt: Instant,
     val consumedAt: Instant?,

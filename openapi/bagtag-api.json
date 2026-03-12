@@ -84,6 +84,39 @@
         }
       }
     },
+    "/api/auth/profile": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Update the current authenticated user profile",
+        "operationId": "updateAuthProfile",
+        "parameters": [
+          {
+            "name": "X-BagTag-Session",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateProfileRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ProfileResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/health": {
       "get": {
         "tags": ["health-controller"],
@@ -151,8 +184,22 @@
       },
       "AuthenticatedUser": {
         "type": "object",
-        "properties": { "email": { "type": "string" } },
+        "properties": {
+          "email": { "type": "string" },
+          "displayName": { "type": "string" }
+        },
         "required": ["email"]
+      },
+      "UpdateProfileRequest": {
+        "type": "object",
+        "properties": { "displayName": { "type": "string" } }
+      },
+      "ProfileResponse": {
+        "type": "object",
+        "properties": {
+          "user": { "$ref": "#/components/schemas/AuthenticatedUser" }
+        },
+        "required": ["user"]
       },
       "SessionResponse": {
         "type": "object",
@@ -172,9 +219,10 @@
         "properties": {
           "status": { "type": "string" },
           "service": { "type": "string" },
+          "version": { "type": "string" },
           "timestamp": { "type": "string", "format": "date-time" }
         },
-        "required": ["service", "status", "timestamp"]
+        "required": ["service", "status", "timestamp", "version"]
       },
       "MeResponse": {
         "type": "object",

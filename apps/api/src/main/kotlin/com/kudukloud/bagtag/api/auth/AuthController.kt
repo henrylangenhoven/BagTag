@@ -62,6 +62,25 @@ class AuthController(
     return authService.me(sessionToken)
   }
 
+  @PostMapping(
+      "/profile",
+      consumes = [MediaType.APPLICATION_JSON_VALUE],
+  )
+  @Operation(
+      operationId = "updateAuthProfile",
+      summary = "Update the current authenticated user profile",
+  )
+  fun updateProfile(
+      @RequestHeader("X-BagTag-Session", required = false) sessionToken: String?,
+      @RequestBody request: UpdateProfileRequest,
+  ): ResponseEntity<ProfileResponse> {
+    val profile =
+        authService.updateProfile(sessionToken, request.displayName)
+            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+
+    return ResponseEntity.ok(profile)
+  }
+
   @PostMapping("/logout", consumes = [MediaType.APPLICATION_JSON_VALUE])
   @Operation(
       operationId = "logoutAuthSession",

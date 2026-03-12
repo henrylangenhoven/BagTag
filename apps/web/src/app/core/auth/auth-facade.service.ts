@@ -18,6 +18,12 @@ type SessionState = {
   data: MeResponse | null;
 };
 
+type ProfileState = {
+  loading: boolean;
+  error: string;
+  message: string;
+};
+
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
   private readonly authApi = inject(AuthService);
@@ -36,8 +42,21 @@ export class AuthFacadeService {
     data: null,
   });
 
+  readonly profileState = signal<ProfileState>({
+    loading: false,
+    error: '',
+    message: '',
+  });
+
   readonly isAuthenticated = computed(() => this.sessionState().data?.authenticated ?? false);
   readonly currentUserEmail = computed(() => this.sessionState().data?.user?.email ?? 'owner');
+  readonly currentUserDisplayName = computed(
+    () => this.sessionState().data?.user?.displayName ?? '',
+  );
+  readonly currentUserLabel = computed(() => {
+    const displayName = this.currentUserDisplayName().trim();
+    return displayName || this.currentUserEmail();
+  });
 
   requestMagicLink(email: string) {
     this.requestState.set({
@@ -180,12 +199,78 @@ export class AuthFacadeService {
       );
   }
 
+  saveDisplayName(displayName: string) {
+    const sessionToken = this.sessionService.sessionToken();
+    if (!sessionToken) {
+      this.profileState.set({
+        loading: false,
+        error: 'No active session was found for this browser.',
+        message: '',
+      });
+      return throwError(() => new Error('No active session.'));
+    }
+
+    this.profileState.set({
+      loading: true,
+      error: '',
+      message: '',
+    });
+
+    return this.authApi
+      .updateAuthProfile({
+        'X-BagTag-Session': sessionToken,
+        body: {
+          displayName,
+        },
+      })
+      .pipe(
+        tap((response) => {
+          this.sessionState.update((state) => ({
+            ...state,
+            data:
+              state.data == null
+                ? {
+                    authenticated: true,
+                    user: response.user,
+                  }
+                : {
+                    ...state.data,
+                    user: response.user,
+                  },
+          }));
+          this.profileState.set({
+            loading: false,
+            error: '',
+            message: response.user.displayName
+              ? 'Display name saved.'
+              : 'Display name cleared. Email will be shown instead.',
+          });
+        }),
+        catchError((error) => {
+          this.profileState.set({
+            loading: false,
+            error: this.describeError(error, 'Profile update failed.'),
+            message: '',
+          });
+          return throwError(() => error);
+        }),
+      );
+  }
+
   clearRequestState(): void {
     this.requestState.set({
       loading: false,
       message: '',
       error: '',
       previewToken: null,
+    });
+  }
+
+  clearProfileState(): void {
+    this.profileState.set({
+      loading: false,
+      error: '',
+      message: '',
     });
   }
 

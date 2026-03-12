@@ -1,6 +1,7 @@
 create table users (
   id uuid primary key,
   email varchar(320) not null unique,
+  display_name varchar(120),
   created_at timestamp not null,
   last_login_at timestamp
 );
