@@ -19,36 +19,36 @@ This is the working backlog for the BagTag MVP.
 
 ## Milestone 0: Repo Bootstrap
 
-- [ ] Create repository
-- [ ] Add README
-- [ ] Add architecture.md
-- [ ] Add tasks.md
-- [ ] Add AGENTS.md
-- [ ] Add `.gitignore`
-- [ ] Add `.editorconfig`
-- [ ] Add `Makefile`
+- [x] Create repository
+- [x] Add README
+- [x] Add architecture.md
+- [x] Add tasks.md
+- [x] Add AGENTS.md
+- [x] Add `.gitignore`
+- [x] Add `.editorconfig`
+- [x] Add `Makefile`
 - [ ] Configure container registry
 
 ## Milestone 1: Backend Bootstrap
 
-- [ ] Create Spring Boot Kotlin project
-- [ ] Configure Gradle Kotlin DSL
-- [ ] Add health endpoint
-- [ ] Add Dockerfile
-- [ ] Create package structure
+- [x] Create Spring Boot Kotlin project
+- [x] Configure Gradle Kotlin DSL
+- [x] Add health endpoint
+- [x] Add Dockerfile
+- [x] Create package structure
 
 ## Milestone 2: Frontend Bootstrap
 
-- [ ] Create Angular project
-- [ ] Add routing
-- [ ] Add owner/public modules
-- [ ] Add API client layer
-- [ ] Add nginx config
-- [ ] Add Dockerfile
+- [x] Create Angular project
+- [x] Add routing
+- [x] Add owner/public modules
+- [x] Add API client layer
+- [x] Add nginx config
+- [x] Add Dockerfile
 
 ## Milestone 3: Database
 
-- [ ] Set up PostgreSQL
+- [x] Set up PostgreSQL
 - [ ] Add Flyway
 - [ ] Create initial schema
 
@@ -62,12 +62,12 @@ Tables:
 
 ## Milestone 4: Authentication
 
-- [ ] Request magic link endpoint
-- [ ] Consume magic link endpoint
+- [x] Request magic link endpoint
+- [x] Consume magic link endpoint
 - [ ] Token hashing
-- [ ] Session auth
-- [ ] Auth check endpoint
-- [ ] Logout endpoint
+- [~] Session auth
+- [x] Auth check endpoint
+- [x] Logout endpoint
 
 ## Milestone 5: Tag Management
 
@@ -81,7 +81,7 @@ Tables:
 
 - [ ] Public tag lookup
 - [ ] Scan event logging
-- [ ] Public page UI
+- [~] Public page UI
 - [ ] Owner redirect logic
 
 ## Milestone 7: Messages
@@ -102,7 +102,7 @@ Tables:
 
 - [ ] Backend build workflow
 - [ ] Frontend build workflow
-- [ ] Container builds
+- [~] Container builds
 - [ ] Push images to registry
 
 ## Milestone 10: Preview Environments
@@ -122,6 +122,6 @@ Tables:
 ## Milestone 12: Hardening
 
 - [ ] Structured logging
-- [ ] Health probes
+- [~] Health probes
 - [ ] Error handling
 - [ ] Real device testing

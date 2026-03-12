@@ -25,13 +25,13 @@ services:
     container_name: bagtag-api
     restart: unless-stopped
     environment:
-      BAGTAG_MAGIC_LINK_BASE_URL: ${BAGTAG_MAGIC_LINK_BASE_URL:-http://localhost:8080/login}
+      BAGTAG_MAGIC_LINK_BASE_URL: ${BAGTAG_MAGIC_LINK_BASE_URL:-http://localhost:4280/login}
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-onboarding@resend.dev}
       RESEND_FROM_NAME: ${RESEND_FROM_NAME:-BagTag}
       RESEND_REPLY_TO: ${RESEND_REPLY_TO:-}
     ports:
-      - "8081:8080"
+      - "8180:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
     container_name: bagtag-web
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "4280:80"
     depends_on:
       - api
 

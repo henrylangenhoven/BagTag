@@ -80,9 +80,11 @@ The stack reads local configuration from `.env`. A committed template lives in `
 
 Services:
 
-- Web UI: `http://localhost:8080`
-- API: `http://localhost:8081`
+- Web UI: `http://localhost:4280`
+- API: `http://localhost:8180`
 - Postgres: `localhost:5432`
+
+These Docker ports intentionally do not overlap with the default local dev ports used by Angular (`4200`) and Spring Boot (`8080`), so you can run IntelliJ and Docker side by side.
 
 The web container proxies `/api/*` to the API container, which keeps the browser-side shape close to a future ingress setup in Kubernetes.
 
