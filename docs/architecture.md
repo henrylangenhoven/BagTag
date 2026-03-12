@@ -2,25 +2,21 @@
 
 ## Purpose
 
-BagTag is a self-hosted web application for creating and managing luggage tags that contain QR codes. When a QR code is scanned, the scanner is taken to a public BagTag page where they can report the whereabouts of the luggage without seeing the owner's personal contact details.
+BagTag is a self-hosted web application for creating and managing luggage tags that contain QR codes. When a QR code is scanned, the scanner lands on a public BagTag page where they can report the whereabouts of the luggage without seeing the owner's personal contact details.
 
-Owners can sign in using magic-link authentication to manage their tags, view scan activity, and read incoming sighting messages.
+Owners sign in using magic-link authentication to manage tags, view scan activity, and read incoming sighting messages.
 
-The primary goal is to deliver a fast, minimal-effort MVP that is safe, privacy-conscious, and easy to deploy on a personal k3s cluster.
-
----
+The goal is a fast, privacy-conscious MVP that is easy to deploy on a personal k3s cluster.
 
 ## Product Goals
 
 - Fast MVP with minimal engineering overhead
-- Self-hosted deployment in a personal k3s cluster
+- Self-hosted deployment on a personal k3s cluster
 - Public QR scan flow that protects owner privacy
 - Owner dashboard for tag management
 - Privacy-conscious event logging and abuse prevention
-- Production environment plus ephemeral preview environments per pull request
-- Simple architecture that scales modestly without a rewrite
-
----
+- Production plus ephemeral preview environments per pull request
+- Simple architecture that can scale modestly without a rewrite
 
 ## Non-Goals for v1
 
@@ -31,8 +27,6 @@ The primary goal is to deliver a fast, minimal-effort MVP that is safe, privacy-
 - Real-time updates with WebSockets
 - Precise geolocation tracking without consent
 - Multi-tenant organisation support
-
----
 
 ## High-Level Architecture
 
@@ -46,18 +40,18 @@ BagTag is a monorepo containing:
 
 ### Runtime Components
 
-Web App
+#### Web App
+
 Angular SPA providing:
 
 - owner dashboard
 - public tag pages
 
-Served by nginx container.
+Served by an nginx container.
 
-API
-Kotlin Spring Boot application.
+#### API
 
-Responsibilities:
+Kotlin Spring Boot application responsible for:
 
 - authentication
 - owner tag management
@@ -66,10 +60,11 @@ Responsibilities:
 - abuse protection
 - retention cleanup
 
-Session-based authentication after magic-link login.
+Session-based authentication is used after magic-link login.
 
-Database
-PostgreSQL storing:
+#### Database
+
+PostgreSQL stores:
 
 - users
 - tags
@@ -77,71 +72,68 @@ PostgreSQL storing:
 - sighting messages
 - magic-link tokens
 
-Schema managed using Flyway.
+Schema changes are managed using Flyway.
 
-Networking
+#### Networking
 
 k3s ingress handles routing and TLS termination.
 
 Example domains:
 
-bagtag.example.com
-pr-42.bagtag.example.com
+- `bagtag.example.com`
+- `pr-42.bagtag.example.com`
 
-CI/CD
+#### CI/CD
 
 GitHub Actions workflows:
 
-ci.yml
-preview.yml
-preview-cleanup.yml
-prod.yml
-
----
+- `ci.yml`
+- `preview.yml`
+- `preview-cleanup.yml`
+- `prod.yml`
 
 ## Core User Flows
 
-Owner Login
+### Owner Login
 
-1. Owner enters email
-2. Backend generates one-time token
-3. Magic link email sent
-4. Owner clicks link
-5. Backend validates token
-6. Session created
-7. Owner redirected to dashboard
+1. Owner enters email.
+2. Backend generates a one-time token.
+3. Magic-link email is sent.
+4. Owner clicks the link.
+5. Backend validates the token.
+6. A session is created.
+7. Owner is redirected to the dashboard.
 
-Owner Tag Management
+### Owner Tag Management
 
 Owners can:
 
-- create tag
-- rename tag
-- enable/disable tag
-- archive tag
+- create tags
+- rename tags
+- enable or disable tags
+- archive tags
 - view scan history
 - view messages
 
-Public Scan Flow
+### Public Scan Flow
 
-1. QR code scanned
-2. Browser opens BagTag URL
-3. Backend logs scan event
-4. Public page displayed
-5. Scanner optionally sends message
-6. Owner receives message
+1. QR code is scanned.
+2. Browser opens the BagTag URL.
+3. Backend logs the scan event.
+4. Public page is displayed.
+5. Scanner can optionally send a message.
+6. Owner receives the message.
 
-Owner Scans Own Tag
+### Owner Scans Own Tag
 
-If authenticated owner scans their own tag:
+If the authenticated owner scans their own tag:
 
-- system detects ownership
-- user redirected to manage flow
-
----
+- the system detects ownership
+- the user is redirected to the manage flow
 
 ## Repository Structure
 
+```text
 bagtag/
 ├─ apps/
 │  ├─ web/
@@ -159,15 +151,13 @@ bagtag/
 ├─ AGENTS.md
 ├─ README.md
 └─ Makefile
-
----
+```
 
 ## Backend Structure
 
-Feature-oriented structure.
+Feature-oriented structure under `apps/api/src/main/kotlin/com/bagtag/`:
 
-apps/api/src/main/kotlin/com/bagtag/
-
+```text
 common/
 auth/
 users/
@@ -176,81 +166,80 @@ publicscan/
 abuse/
 retention/
 notifications/
-
----
+```
 
 ## Frontend Structure
 
-apps/web/src/app
+Planned structure under `apps/web/src/app`:
 
+```text
 core/
 features/auth/
 features/owner/
 features/public-tag/
 shared/
-
----
+```
 
 ## Domain Model
 
-User
+### User
 
-id
-email
-created_at
-last_login_at
+- `id`
+- `email`
+- `created_at`
+- `last_login_at`
 
-Tag
+### Tag
 
-id
-public_id
-owner_user_id
-display_name
-status
-created_at
-updated_at
+- `id`
+- `public_id`
+- `owner_user_id`
+- `display_name`
+- `status`
+- `created_at`
+- `updated_at`
 
-ScanEvent
+### ScanEvent
 
-id
-tag_id
-scanned_at
-ownership_context
-ip_hash
-user_agent
-accept_language
-referrer
-country_code
-region_code
-city_approx
-message_started_at
-message_submitted_at
+- `id`
+- `tag_id`
+- `scanned_at`
+- `ownership_context`
+- `ip_hash`
+- `user_agent`
+- `accept_language`
+- `referrer`
+- `country_code`
+- `region_code`
+- `city_approx`
+- `message_started_at`
+- `message_submitted_at`
 
-SightingMessage
+### SightingMessage
 
-id
-tag_id
-scan_event_id
-message
-sender_contact_optional
-created_at
+- `id`
+- `tag_id`
+- `scan_event_id`
+- `message`
+- `sender_contact_optional`
+- `created_at`
 
-MagicLinkToken
+### MagicLinkToken
 
-id
-user_id
-token_hash
-expires_at
-consumed_at
-created_at
-
----
+- `id`
+- `user_id`
+- `token_hash`
+- `expires_at`
+- `consumed_at`
+- `created_at`
 
 ## Security and Privacy
 
-QR codes must contain only:
+QR codes must contain only a public tag URL, for example:
 
+```text
 https://bagtag.example.com/t/bt_randomId
+```
 
 Never include:
 
@@ -268,8 +257,6 @@ Tokens must:
 
 Session cookies are HTTP-only.
 
----
-
 ## Abuse Prevention
 
 MVP controls:
@@ -278,68 +265,37 @@ MVP controls:
 - message length limits
 - per-tag cooldown
 - spam filtering
-- captcha only if suspicious behaviour
-
----
+- captcha only for suspicious behaviour
 
 ## API Overview
 
-Public
+### Public
 
-GET /api/public/tags/{publicId}
-POST /api/public/tags/{publicId}/scan
-POST /api/public/tags/{publicId}/messages
+- `GET /api/public/tags/{publicId}`
+- `POST /api/public/tags/{publicId}/scan`
+- `POST /api/public/tags/{publicId}/messages`
 
-Auth
+### Auth
 
-POST /api/auth/magic-link/request
-POST /api/auth/magic-link/consume
-POST /api/auth/logout
-GET /api/auth/me
+- `POST /api/auth/magic-link/request`
+- `POST /api/auth/magic-link/consume`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
 
-Owner
+### Owner
 
-GET /api/me/tags
-POST /api/me/tags
-PATCH /api/me/tags/{id}
-GET /api/me/tags/{id}/scans
-GET /api/me/tags/{id}/messages
-
----
+- `GET /api/me/tags`
+- `POST /api/me/tags`
+- `PATCH /api/me/tags/{id}`
+- `GET /api/me/tags/{id}/scans`
+- `GET /api/me/tags/{id}/messages`
 
 ## Environments
 
-Production
+### Production
 
-Namespace: bagtag-prod
+- Namespace: `bagtag-prod`
 
-Preview environments
+### Preview Environments
 
-Namespace pattern:
-
-bagtag-pr-123
-
-Hostname pattern:
-
-pr-123.bagtag.example.com
-
-Destroyed automatically when PR closes.
-
----
-
-## Recommended MVP Delivery Order
-
-1. Repo bootstrap
-2. Backend skeleton
-3. Frontend skeleton
-4. PostgreSQL + Flyway
-5. Magic-link login
-6. Tag CRUD
-7. Public tag page
-8. Scan logging
-9. Message submission
-10. Owner dashboard
-11. Abuse protection
-12. CI pipeline
-13. Preview environments
-14. Production deployment
+- Namespace pattern: `bagtag-pr-123`

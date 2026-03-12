@@ -2,15 +2,15 @@
 
 BagTag is a self-hosted luggage tag system built around QR codes. A scanned tag should open a privacy-preserving public page where someone can report a bag's location without seeing the owner's identity, while the owner manages tags and scan history through an authenticated app.
 
-This repository is currently in the bootstrap stage. The repo structure, core docs, Angular app, Spring Boot app, Helm chart, and CI/deployment placeholders are present, but the product flows described in the architecture are not implemented yet.
+The repository is currently in the bootstrap stage. The core repo structure, docs, Angular app, Spring Boot app, Helm chart, and CI/deployment placeholders exist, but the product flows described in the architecture are not implemented yet.
 
 ## Current State
 
 - `apps/web` is an Angular 21 app with the default starter screen and no feature routes yet.
-- `apps/api` is a Spring Boot 4 bootstrap app that currently starts successfully but does not expose BagTag-specific endpoints yet.
-- `deploy/` contains Helm and environment scaffolding, but the workflow and deployment scripts are still empty placeholders.
-- `docs/architecture.md` describes the intended system shape and product boundaries.
-- `docs/tasks.md` is the practical backlog for moving from scaffold to MVP.
+- `apps/api` is a Spring Boot 4 bootstrap app that starts successfully but does not expose BagTag-specific endpoints yet.
+- `deploy/` contains Helm and environment scaffolding, but the workflow and deployment scripts are still placeholders.
+- `docs/architecture.md` describes the intended product and system design.
+- `docs/tasks.md` tracks the MVP backlog.
 
 ## Repository Layout
 
@@ -28,7 +28,8 @@ docs/       Architecture, tasks, and ADRs
 
 Requirements:
 
-- Node.js with npm
+- Node.js
+- npm
 
 Run:
 
@@ -60,11 +61,11 @@ cd apps/api
 ./gradlew test
 ```
 
-## How To Read This Repo
+## Documentation Map
 
-Start with the code if you want the current truth of the project. Use the docs for intent:
+Use the code for the current truth of the project and the docs for target shape and backlog:
 
-- [`docs/architecture.md`](docs/architecture.md) explains the planned product flows, privacy rules, and target deployment model.
-- [`docs/tasks.md`](docs/tasks.md) shows the staged MVP backlog and is a better indicator of what still needs to be built than the folder structure alone.
+- [`docs/architecture.md`](docs/architecture.md) explains the planned system, privacy model, flows, and deployment approach.
+- [`docs/tasks.md`](docs/tasks.md) is the working MVP backlog.
 
-In practice, the docs are ahead of the implementation right now. The README reflects the codebase as it exists today and uses the docs as the reference for where the project is heading.
+The docs are intentionally ahead of implementation right now.

@@ -1,153 +1,127 @@
 # BagTag Tasks
 
-Status Legend
+This is the working backlog for the BagTag MVP.
 
-[ ] Not started
-[~] In progress
-[x] Done
-[-] Deferred
+## Status Legend
 
----
+- `[ ]` Not started
+- `[~]` In progress
+- `[x]` Done
+- `[-]` Deferred
 
 ## Planning
 
-[x] Choose stack
-[x] Choose monorepo
-[x] Choose GitHub Actions
-[x] Choose k3s deployment
-[x] Choose magic-link auth
+- [x] Choose stack
+- [x] Choose monorepo
+- [x] Choose GitHub Actions
+- [x] Choose k3s deployment
+- [x] Choose magic-link auth
 
----
+## Milestone 0: Repo Bootstrap
 
-## Milestone 0 — Repo Bootstrap
+- [ ] Create repository
+- [ ] Add README
+- [ ] Add architecture.md
+- [ ] Add tasks.md
+- [ ] Add AGENTS.md
+- [ ] Add `.gitignore`
+- [ ] Add `.editorconfig`
+- [ ] Add `Makefile`
+- [ ] Configure container registry
 
-[ ] Create repository
-[ ] Add README
-[ ] Add architecture.md
-[ ] Add tasks.md
-[ ] Add AGENTS.md
-[ ] Add .gitignore
-[ ] Add .editorconfig
-[ ] Add Makefile
-[ ] Configure container registry
+## Milestone 1: Backend Bootstrap
 
----
+- [ ] Create Spring Boot Kotlin project
+- [ ] Configure Gradle Kotlin DSL
+- [ ] Add health endpoint
+- [ ] Add Dockerfile
+- [ ] Create package structure
 
-## Milestone 1 — Backend Bootstrap
+## Milestone 2: Frontend Bootstrap
 
-[ ] Create Spring Boot Kotlin project
-[ ] Configure Gradle Kotlin DSL
-[ ] Add health endpoint
-[ ] Add Dockerfile
-[ ] Create package structure
+- [ ] Create Angular project
+- [ ] Add routing
+- [ ] Add owner/public modules
+- [ ] Add API client layer
+- [ ] Add nginx config
+- [ ] Add Dockerfile
 
----
+## Milestone 3: Database
 
-## Milestone 2 — Frontend Bootstrap
+- [ ] Set up PostgreSQL
+- [ ] Add Flyway
+- [ ] Create initial schema
 
-[ ] Create Angular project
-[ ] Add routing
-[ ] Add owner/public modules
-[ ] Add API client layer
-[ ] Add nginx config
-[ ] Add Dockerfile
+Tables:
 
----
+- [ ] `users`
+- [ ] `tags`
+- [ ] `scan_events`
+- [ ] `sighting_messages`
+- [ ] `magic_link_tokens`
 
-## Milestone 3 — Database
+## Milestone 4: Authentication
 
-[ ] Setup PostgreSQL
-[ ] Add Flyway
-[ ] Create initial schema
+- [ ] Request magic link endpoint
+- [ ] Consume magic link endpoint
+- [ ] Token hashing
+- [ ] Session auth
+- [ ] Auth check endpoint
+- [ ] Logout endpoint
 
-Tables
+## Milestone 5: Tag Management
 
-[ ] users
-[ ] tags
-[ ] scan_events
-[ ] sighting_messages
-[ ] magic_link_tokens
+- [ ] Tag list endpoint
+- [ ] Create tag
+- [ ] Update tag
+- [ ] Tag state handling
+- [ ] Owner UI
 
----
+## Milestone 6: Public Scan Flow
 
-## Milestone 4 — Authentication
+- [ ] Public tag lookup
+- [ ] Scan event logging
+- [ ] Public page UI
+- [ ] Owner redirect logic
 
-[ ] Request magic link endpoint
-[ ] Consume magic link endpoint
-[ ] Token hashing
-[ ] Session auth
-[ ] Auth check endpoint
-[ ] Logout endpoint
+## Milestone 7: Messages
 
----
+- [ ] Message submission endpoint
+- [ ] Public message form
+- [ ] Owner messages list
 
-## Milestone 5 — Tag Management
+## Milestone 8: Abuse Protection
 
-[ ] Tag list endpoint
-[ ] Create tag
-[ ] Update tag
-[ ] Tag state handling
-[ ] Owner UI
+- [ ] Rate limiting
+- [ ] Message length limits
+- [ ] Spam filtering
+- [ ] IP hashing
+- [ ] Data retention
 
----
+## Milestone 9: CI
 
-## Milestone 6 — Public Scan Flow
+- [ ] Backend build workflow
+- [ ] Frontend build workflow
+- [ ] Container builds
+- [ ] Push images to registry
 
-[ ] Public tag lookup
-[ ] Scan event logging
-[ ] Public page UI
-[ ] Owner redirect logic
+## Milestone 10: Preview Environments
 
----
+- [ ] Helm chart
+- [ ] Preview deploy workflow
+- [ ] Preview cleanup workflow
+- [ ] PR preview URL comment
 
-## Milestone 7 — Messages
+## Milestone 11: Production Deployment
 
-[ ] Message submission endpoint
-[ ] Public message form
-[ ] Owner messages list
+- [ ] Prod Helm values
+- [ ] Prod deploy workflow
+- [ ] Production secrets
+- [ ] Database backups
 
----
+## Milestone 12: Hardening
 
-## Milestone 8 — Abuse Protection
-
-[ ] Rate limiting
-[ ] Message length limits
-[ ] Spam filtering
-[ ] IP hashing
-[ ] Data retention
-
----
-
-## Milestone 9 — CI
-
-[ ] Backend build workflow
-[ ] Frontend build workflow
-[ ] Container builds
-[ ] Push images to registry
-
----
-
-## Milestone 10 — Preview Environments
-
-[ ] Helm chart
-[ ] Preview deploy workflow
-[ ] Preview cleanup workflow
-[ ] PR preview URL comment
-
----
-
-## Milestone 11 — Production Deployment
-
-[ ] Prod Helm values
-[ ] Prod deploy workflow
-[ ] Production secrets
-[ ] Database backups
-
----
-
-## Milestone 12 — Hardening
-
-[ ] Structured logging
-[ ] Health probes
-[ ] Error handling
-[ ] Real device testing
+- [ ] Structured logging
+- [ ] Health probes
+- [ ] Error handling
+- [ ] Real device testing
