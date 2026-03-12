@@ -11,7 +11,7 @@ still in progress.
 ## Current State
 
 - `apps/web` is an Angular 21 SPA with public, login, owner, and about routes.
-- `apps/api` is a Spring Boot 4 app with health, magic-link auth, session, and profile endpoints.
+- `apps/api` is a Spring Boot 4 app with health, magic-link auth, session, profile, and Flyway-backed PostgreSQL persistence for users and magic-link tokens.
 - `deploy/` contains Helm and environment scaffolding, but the workflow and deployment scripts are still placeholders.
 - `docs/architecture.md` describes the intended product and system design.
 - `docs/tasks.md` tracks the MVP backlog.
@@ -143,7 +143,7 @@ Use the code for the current truth of the project and the docs for target shape 
 - [`docs/architecture.md`](docs/architecture.md) explains the planned system, privacy model, flows, and deployment approach.
 - [`docs/tasks.md`](docs/tasks.md) is the working MVP backlog.
 
-The docs are intentionally ahead of implementation right now.
+The docs are still slightly ahead of implementation, but they now track the current auth, API-generation, and database setup closely.
 
 ## Versioning
 

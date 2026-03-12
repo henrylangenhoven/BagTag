@@ -166,7 +166,7 @@ bagtag/
 
 ## Backend Structure
 
-Feature-oriented structure under `apps/api/src/main/kotlin/com/bagtag/`:
+Feature-oriented structure under `apps/api/src/main/kotlin/com/kudukloud/bagtag/api/`:
 
 ```text
 common/
