@@ -2,6 +2,8 @@ FROM eclipse-temurin:25-jdk AS build
 
 WORKDIR /app
 
+ENV BAGTAG_SKIP_SPOTLESS_APPLY=1
+
 COPY gradlew gradlew
 COPY gradle gradle
 COPY settings.gradle.kts build.gradle.kts ./

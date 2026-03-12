@@ -57,4 +57,13 @@ tasks.withType<Test> { useJUnitPlatform() }
 
 tasks.withType<JavaCompile>().configureEach { options.release = 24 }
 
-tasks.named("build") { dependsOn("spotlessApply") }
+val skipSpotlessApply =
+    providers.environmentVariable("CI").map(String::toBooleanStrictOrNull).orElse(false).get() ||
+        providers.gradleProperty("skipSpotlessApply").isPresent ||
+        providers.environmentVariable("BAGTAG_SKIP_SPOTLESS_APPLY").isPresent
+
+tasks.named("check") { dependsOn("spotlessCheck") }
+
+if (!skipSpotlessApply) {
+  tasks.named("build") { dependsOn("spotlessApply") }
+}
