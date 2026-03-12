@@ -20,9 +20,12 @@ import { LogoutAuthSession$Params } from '../fn/auth/logout-auth-session';
 import { LogoutResponse } from '../models/logout-response';
 import { MagicLinkRequestedResponse } from '../models/magic-link-requested-response';
 import { MeResponse } from '../models/me-response';
+import { ProfileResponse } from '../models/profile-response';
 import { requestMagicLink } from '../fn/auth/request-magic-link';
 import { RequestMagicLink$Params } from '../fn/auth/request-magic-link';
 import { SessionResponse } from '../models/session-response';
+import { updateAuthProfile } from '../fn/auth/update-auth-profile';
+import { UpdateAuthProfile$Params } from '../fn/auth/update-auth-profile';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseService {
@@ -146,6 +149,45 @@ export class AuthService extends BaseService {
   ): Observable<LogoutResponse> {
     return this.logoutAuthSession$Response(params, context).pipe(
       map((r: StrictHttpResponse<LogoutResponse>): LogoutResponse => r.body),
+    );
+  }
+
+  /** Path part for operation `updateAuthProfile()` */
+  static readonly UpdateAuthProfilePath = '/api/auth/profile';
+
+  /**
+   * Update the current authenticated user profile.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateAuthProfile()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAuthProfile$Response(
+    params: UpdateAuthProfile$Params,
+    context?: HttpContext,
+  ): Observable<StrictHttpResponse<ProfileResponse>> {
+    return updateAuthProfile(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update the current authenticated user profile.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateAuthProfile$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAuthProfile(
+    params: UpdateAuthProfile$Params,
+    context?: HttpContext,
+  ): Observable<ProfileResponse> {
+    return this.updateAuthProfile$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ProfileResponse>): ProfileResponse => r.body),
     );
   }
 

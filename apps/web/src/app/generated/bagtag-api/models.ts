@@ -9,4 +9,6 @@ export type { MagicLinkConsumeRequest } from './models/magic-link-consume-reques
 export type { MagicLinkRequest } from './models/magic-link-request';
 export type { MagicLinkRequestedResponse } from './models/magic-link-requested-response';
 export type { MeResponse } from './models/me-response';
+export type { ProfileResponse } from './models/profile-response';
 export type { SessionResponse } from './models/session-response';
+export type { UpdateProfileRequest } from './models/update-profile-request';
