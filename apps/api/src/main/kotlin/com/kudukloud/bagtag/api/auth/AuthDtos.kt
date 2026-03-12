@@ -11,7 +11,7 @@ data class MagicLinkRequest(
 data class MagicLinkRequestedResponse(
     val email: String,
     val expiresAt: Instant,
-    val previewToken: String,
+    val previewToken: String?,
 )
 
 data class MagicLinkConsumeRequest(

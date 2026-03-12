@@ -1,5 +1,8 @@
 package com.kudukloud.bagtag.api.auth
 
+import com.kudukloud.bagtag.api.notifications.EmailSender
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.time.Clock
 import java.time.Duration
 import java.time.Instant
@@ -9,6 +12,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthService(
+    private val emailSender: EmailSender,
+    private val magicLinkProperties: MagicLinkProperties,
     private val clock: Clock = Clock.systemUTC(),
 ) {
   private val pendingLinks = ConcurrentHashMap<String, PendingMagicLink>()
@@ -20,13 +25,15 @@ class AuthService(
     val normalizedEmail = email.trim().lowercase()
     val token = "ml_${UUID.randomUUID()}"
     val expiresAt = Instant.now(clock).plus(MAGIC_LINK_TTL)
+    val magicLinkUrl = magicLinkUrl(token)
 
     pendingLinks[token] = PendingMagicLink(email = normalizedEmail, expiresAt = expiresAt)
+    emailSender.sendMagicLink(normalizedEmail, magicLinkUrl)
 
     return MagicLinkRequestedResponse(
         email = normalizedEmail,
         expiresAt = expiresAt,
-        previewToken = token,
+        previewToken = previewToken(token),
     )
   }
 
@@ -71,6 +78,20 @@ class AuthService(
   private fun purgeExpiredLinks() {
     val now = Instant.now(clock)
     pendingLinks.entries.removeIf { (_, link) -> link.expiresAt.isBefore(now) }
+  }
+
+  private fun magicLinkUrl(token: String): String {
+    val separator = if ('?' in magicLinkProperties.baseUrl) '&' else '?'
+    val encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8)
+    return "${magicLinkProperties.baseUrl}$separator" + "token=$encodedToken"
+  }
+
+  private fun previewToken(token: String): String? {
+    return if (!emailSender.deliversEmail()) {
+      token
+    } else {
+      null
+    }
   }
 
   companion object {

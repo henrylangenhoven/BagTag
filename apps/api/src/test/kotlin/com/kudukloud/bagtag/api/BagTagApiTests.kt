@@ -43,13 +43,14 @@ class BagTagApiTests {
     assertEquals(HttpStatus.OK, requestResponse.statusCode)
     val requestBody = requestResponse.body ?: error("Missing magic-link request response")
     assertEquals("owner@example.com", requestBody.email)
-    assertTrue(requestBody.previewToken.startsWith("ml_"))
+    assertNotNull(requestBody.previewToken)
+    assertTrue(requestBody.previewToken!!.startsWith("ml_"))
 
     val consumeResponse =
         restClient()
             .post()
             .uri("/api/auth/magic-link/consume")
-            .body(MagicLinkConsumeRequest(token = requestBody.previewToken))
+            .body(MagicLinkConsumeRequest(token = requestBody.previewToken!!))
             .retrieve()
             .toEntity(SessionResponse::class.java)
 

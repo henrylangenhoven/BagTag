@@ -1,3 +1,14 @@
 spring:
   application:
     name: BagTag-Api
+
+bagtag:
+  auth:
+    magic-link:
+      base-url: ${BAGTAG_MAGIC_LINK_BASE_URL:http://localhost:4200/login}
+  notifications:
+    resend:
+      api-key: ${RESEND_API_KEY:}
+      from-email: ${RESEND_FROM_EMAIL:onboarding@resend.dev}
+      from-name: ${RESEND_FROM_NAME:BagTag}
+      reply-to: ${RESEND_REPLY_TO:}

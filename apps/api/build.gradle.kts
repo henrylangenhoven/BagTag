@@ -10,7 +10,7 @@ plugins {
 
 group = "com.kudukloud"
 
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 
 description = "BagTag Api"
 
