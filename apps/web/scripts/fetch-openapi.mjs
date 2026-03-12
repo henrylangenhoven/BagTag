@@ -1,5 +1,4 @@
 import { mkdir, writeFile } from 'node:fs/promises';
-import prettier from 'prettier';
 
 const docsUrl = process.env.API_DOCS_URL ?? 'http://localhost:8080/v3/api-docs';
 const outputPath = new URL('../../openapi/bagtag-api.json', import.meta.url);
@@ -11,11 +10,8 @@ if (!response.ok) {
 }
 
 const document = await response.json();
-const formattedDocument = await prettier.format(JSON.stringify(document), {
-  parser: 'json',
-});
 
 await mkdir(new URL('../../openapi/', import.meta.url), { recursive: true });
-await writeFile(outputPath, formattedDocument, 'utf8');
+await writeFile(outputPath, `${JSON.stringify(document, null, 2)}\n`, 'utf8');
 
 console.log(`Fetched OpenAPI docs from ${docsUrl}`);

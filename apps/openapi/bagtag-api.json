@@ -1,19 +1,29 @@
 {
   "openapi": "3.1.0",
-  "info": { "title": "OpenAPI definition", "version": "v0" },
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
   "servers": [
-    { "url": "http://localhost:8080", "description": "Generated server url" }
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
   ],
   "paths": {
     "/api/auth/magic-link/request": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Request a magic-link email",
         "operationId": "requestMagicLink",
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/MagicLinkRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/MagicLinkRequest"
+              }
             }
           },
           "required": true
@@ -34,7 +44,9 @@
     },
     "/api/auth/magic-link/consume": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Consume a magic-link token and create a session",
         "operationId": "consumeMagicLink",
         "requestBody": {
@@ -52,7 +64,9 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SessionResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
               }
             }
           }
@@ -61,7 +75,9 @@
     },
     "/api/auth/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Log out the current session",
         "operationId": "logoutAuthSession",
         "parameters": [
@@ -69,7 +85,9 @@
             "name": "X-BagTag-Session",
             "in": "header",
             "required": false,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -77,7 +95,9 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LogoutResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
               }
             }
           }
@@ -86,14 +106,18 @@
     },
     "/api/health": {
       "get": {
-        "tags": ["health-controller"],
+        "tags": [
+          "health-controller"
+        ],
         "operationId": "health",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/HealthResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
               }
             }
           }
@@ -102,7 +126,9 @@
     },
     "/api/auth/me": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Fetch the current authenticated user",
         "operationId": "getAuthMe",
         "parameters": [
@@ -110,7 +136,9 @@
             "name": "X-BagTag-Session",
             "in": "header",
             "required": false,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -118,7 +146,9 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/MeResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponse"
+                }
               }
             }
           }
@@ -131,58 +161,117 @@
       "MagicLinkRequest": {
         "type": "object",
         "properties": {
-          "email": { "type": "string", "format": "email", "minLength": 1 }
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          }
         },
-        "required": ["email"]
+        "required": [
+          "email"
+        ]
       },
       "MagicLinkRequestedResponse": {
         "type": "object",
         "properties": {
-          "email": { "type": "string" },
-          "expiresAt": { "type": "string", "format": "date-time" },
-          "previewToken": { "type": "string" }
+          "email": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "previewToken": {
+            "type": "string"
+          }
         },
-        "required": ["email", "expiresAt"]
+        "required": [
+          "email",
+          "expiresAt"
+        ]
       },
       "MagicLinkConsumeRequest": {
         "type": "object",
-        "properties": { "token": { "type": "string", "minLength": 1 } },
-        "required": ["token"]
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "token"
+        ]
       },
       "AuthenticatedUser": {
         "type": "object",
-        "properties": { "email": { "type": "string" } },
-        "required": ["email"]
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
       },
       "SessionResponse": {
         "type": "object",
         "properties": {
-          "sessionToken": { "type": "string" },
-          "user": { "$ref": "#/components/schemas/AuthenticatedUser" }
+          "sessionToken": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/AuthenticatedUser"
+          }
         },
-        "required": ["sessionToken", "user"]
+        "required": [
+          "sessionToken",
+          "user"
+        ]
       },
       "LogoutResponse": {
         "type": "object",
-        "properties": { "loggedOut": { "type": "boolean" } },
-        "required": ["loggedOut"]
+        "properties": {
+          "loggedOut": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "loggedOut"
+        ]
       },
       "HealthResponse": {
         "type": "object",
         "properties": {
-          "status": { "type": "string" },
-          "service": { "type": "string" },
-          "timestamp": { "type": "string", "format": "date-time" }
+          "status": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
         },
-        "required": ["service", "status", "timestamp"]
+        "required": [
+          "service",
+          "status",
+          "timestamp"
+        ]
       },
       "MeResponse": {
         "type": "object",
         "properties": {
-          "authenticated": { "type": "boolean" },
-          "user": { "$ref": "#/components/schemas/AuthenticatedUser" }
+          "authenticated": {
+            "type": "boolean"
+          },
+          "user": {
+            "$ref": "#/components/schemas/AuthenticatedUser"
+          }
         },
-        "required": ["authenticated"]
+        "required": [
+          "authenticated"
+        ]
       }
     }
   }
