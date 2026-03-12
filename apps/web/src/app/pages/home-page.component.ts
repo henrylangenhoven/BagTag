@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <section class="hero">
       <div class="hero-copy">
+        <img class="hero-logo" src="/BagTag-Logo-Large.png" alt="BagTag luggage tag logo" />
         <p class="eyebrow">Current MVP shape</p>
         <h1>Lost bag reporting without exposing the owner.</h1>
         <p class="lede">
@@ -85,6 +86,14 @@ import { RouterLink } from '@angular/router';
 
     .hero-copy {
       padding: 2rem;
+    }
+
+    .hero-logo {
+      display: block;
+      width: min(280px, 58vw);
+      margin-bottom: 1.25rem;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 36px rgba(91, 52, 17, 0.14));
     }
 
     .eyebrow,

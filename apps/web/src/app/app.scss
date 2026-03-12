@@ -30,16 +30,12 @@
   text-decoration: none;
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #c96b2c, #f2c078);
-  color: #fffdf8;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+.brand-logo {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 22px rgba(94, 55, 16, 0.16));
 }
 
 .brand-copy {
@@ -95,5 +91,10 @@
   .topbar {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .brand-logo {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }
