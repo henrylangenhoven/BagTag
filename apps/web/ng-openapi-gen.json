@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/ng-openapi-gen/ng-openapi-gen-schema.json",
-  "input": "openapi/bagtag-api.json",
+  "input": "../../openapi/bagtag-api.json",
   "output": "src/app/generated/bagtag-api",
   "removeStaleFiles": true,
   "services": true,
