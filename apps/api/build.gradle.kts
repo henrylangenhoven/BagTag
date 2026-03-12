@@ -42,8 +42,13 @@ spotless {
 }
 
 dependencies {
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+  implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
+  implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter")
+  implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-actuator")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
