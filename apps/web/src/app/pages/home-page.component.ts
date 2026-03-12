@@ -25,7 +25,8 @@ import { RouterLink } from '@angular/router';
         <h2>First vertical slice</h2>
         <ul>
           <li>Health endpoint is live in the API</li>
-          <li>Magic-link request and consume endpoints exist as in-memory stubs</li>
+          <li>Magic-link request and consume endpoints are wired to the Angular login page</li>
+          <li>Owner session lookup and logout now call the backend API</li>
           <li>Owner and public routes now exist in the Angular app</li>
         </ul>
       </aside>
@@ -56,8 +57,8 @@ import { RouterLink } from '@angular/router';
         <span class="label">Auth</span>
         <h2>Magic-link login</h2>
         <p>
-          The API now exposes a stubbed auth flow so the frontend can be wired to a stable contract
-          before persistence lands.
+          The frontend now calls the API auth endpoints directly, with a local preview-link fallback
+          when email delivery is not configured.
         </p>
         <a routerLink="/login">View login placeholder</a>
       </article>
