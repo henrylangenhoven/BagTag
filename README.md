@@ -63,6 +63,37 @@ cd apps/api
 ./gradlew test
 ```
 
+## Containers
+
+Each app now has its own Dockerfile:
+
+- `apps/web/Dockerfile` builds the Angular app and serves it from Nginx.
+- `apps/api/Dockerfile` builds a Spring Boot jar and runs it on Java 25.
+
+Run the full local stack with Docker Compose from the repo root:
+
+```bash
+docker compose up --build
+```
+
+Services:
+
+- Web UI: `http://localhost:8080`
+- API: `http://localhost:8081`
+- Postgres: `localhost:5432`
+
+The web container proxies `/api/*` to the API container, which keeps the browser-side shape close to a future ingress setup in Kubernetes.
+
+Optional email and magic-link configuration:
+
+```bash
+export RESEND_API_KEY=...
+export RESEND_FROM_EMAIL=hello@your-domain.example
+export RESEND_FROM_NAME=BagTag
+export RESEND_REPLY_TO=support@your-domain.example
+docker compose up --build
+```
+
 ## Documentation Map
 
 Use the code for the current truth of the project and the docs for target shape and backlog:
@@ -71,3 +102,18 @@ Use the code for the current truth of the project and the docs for target shape 
 - [`docs/tasks.md`](docs/tasks.md) is the working MVP backlog.
 
 The docs are intentionally ahead of implementation right now.
+
+## Versioning
+
+BagTag uses repo-wide SemVer with a single canonical version in [`VERSION`](VERSION).
+
+Update it with:
+
+```bash
+./scripts/version.sh bump patch
+./scripts/version.sh bump minor
+./scripts/version.sh bump major
+./scripts/version.sh set 0.2.0
+```
+
+The script syncs version metadata across the backend, frontend, and Helm chart. GitHub Actions can also run the same tool through the `Version Bump` workflow.

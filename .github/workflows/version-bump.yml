@@ -1,0 +1,98 @@
+name: Version Bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Version bump strategy
+        required: true
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+          - set
+      version:
+        description: Explicit SemVer version when release_type is set
+        required: false
+        type: string
+      mode:
+        description: Commit directly or open a pull request
+        required: true
+        type: choice
+        default: pull-request
+        options:
+          - pull-request
+          - direct-push
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate input
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ inputs.release_type }}" == "set" && -z "${{ inputs.version }}" ]]; then
+            echo "version input is required when release_type is set" >&2
+            exit 1
+          fi
+
+      - name: Bump version metadata
+        id: bump
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ inputs.release_type }}" == "set" ]]; then
+            version="$(./scripts/version.sh set "${{ inputs.version }}")"
+          else
+            version="$(./scripts/version.sh bump "${{ inputs.release_type }}")"
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump
+        if: inputs.mode == 'direct-push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add VERSION apps/api/build.gradle.kts apps/web/package.json apps/web/package-lock.json deploy/helm/bagtag/Chart.yaml deploy/helm/bagtag/values.yaml
+          git commit -m "chore: bump version to v${{ steps.bump.outputs.version }}"
+
+      - name: Push directly to default branch
+        if: inputs.mode == 'direct-push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git tag "v${{ steps.bump.outputs.version }}"
+          git push origin HEAD:${{ github.event.repository.default_branch }}
+          git push origin "v${{ steps.bump.outputs.version }}"
+
+      - name: Create pull request
+        if: inputs.mode == 'pull-request'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          base: ${{ github.event.repository.default_branch }}
+          branch: chore/version-bump-v${{ steps.bump.outputs.version }}
+          delete-branch: true
+          title: chore: bump version to v${{ steps.bump.outputs.version }}
+          commit-message: chore: bump version to v${{ steps.bump.outputs.version }}
+          body: |
+            Automated version bump created by GitHub Actions.
+
+            Release type: `${{ inputs.release_type }}`
+            Version: `v${{ steps.bump.outputs.version }}`
