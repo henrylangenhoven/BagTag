@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api-checks:
+    name: API checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Verify API
+        run: ./gradlew --no-daemon check bootJar
+
+  web-checks:
+    name: Web checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Run frontend tests
+        env:
+          CI: "true"
+        run: npm test -- --watch=false
+
+  required-checks:
+    name: Required checks
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - api-checks
+      - web-checks
+    steps:
+      - name: Fail if a required job failed
+        env:
+          API_RESULT: ${{ needs.api-checks.result }}
+          WEB_RESULT: ${{ needs.web-checks.result }}
+        run: |
+          if [[ "$API_RESULT" != "success" || "$WEB_RESULT" != "success" ]]; then
+            echo "api-checks=$API_RESULT"
+            echo "web-checks=$WEB_RESULT"
+            exit 1
+          fi
