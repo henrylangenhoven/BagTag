@@ -4,9 +4,9 @@ services:
     container_name: bagtag-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: bagtag
-      POSTGRES_USER: bagtag
-      POSTGRES_PASSWORD: bagtag
+      POSTGRES_DB: ${POSTGRES_DB:-bagtag}
+      POSTGRES_USER: ${POSTGRES_USER:-bagtag}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bagtag}
     ports:
       - "5432:5432"
     volumes:
@@ -25,7 +25,7 @@ services:
     container_name: bagtag-api
     restart: unless-stopped
     environment:
-      BAGTAG_MAGIC_LINK_BASE_URL: http://localhost:8080/login
+      BAGTAG_MAGIC_LINK_BASE_URL: ${BAGTAG_MAGIC_LINK_BASE_URL:-http://localhost:8080/login}
       RESEND_API_KEY: ${RESEND_API_KEY:-}
       RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-onboarding@resend.dev}
       RESEND_FROM_NAME: ${RESEND_FROM_NAME:-BagTag}

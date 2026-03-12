@@ -76,6 +76,8 @@ Run the full local stack with Docker Compose from the repo root:
 docker compose up --build
 ```
 
+The stack reads local configuration from `.env`. A committed template lives in `.env.example`.
+
 Services:
 
 - Web UI: `http://localhost:8080`
