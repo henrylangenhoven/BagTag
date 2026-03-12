@@ -70,6 +70,7 @@ Notes:
 Requirements:
 
 - Java 25
+- PostgreSQL
 
 Run:
 
@@ -77,6 +78,13 @@ Run:
 cd apps/api
 ./gradlew bootRun
 ```
+
+By default, the API expects PostgreSQL at `jdbc:postgresql://localhost:5432/bagtag` with
+`bagtag` / `bagtag`, and Flyway runs database migrations at application startup for local
+development.
+
+That setup is intended to work with PostgreSQL running in Docker Compose while the API itself runs
+locally from IntelliJ or the terminal on the host machine.
 
 Run tests:
 
@@ -109,6 +117,10 @@ Services:
 These Docker ports intentionally do not overlap with the default local dev ports used by Angular (`4200`) and Spring Boot (`8080`), so you can run IntelliJ and Docker side by side.
 
 The web container proxies `/api/*` to the API container, which keeps the browser-side shape close to a future ingress setup in Kubernetes.
+
+For local Docker development, the API container runs Flyway on startup against the Compose
+PostgreSQL container. In k3s, Flyway should run in an init container before the API pod starts so
+schema changes complete before the app begins serving traffic.
 
 Optional email and magic-link configuration:
 

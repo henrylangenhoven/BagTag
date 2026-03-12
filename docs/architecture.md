@@ -78,6 +78,10 @@ PostgreSQL stores:
 
 Schema changes are managed using Flyway.
 
+For local development, Flyway may run at API application startup. For k3s deployments, Flyway
+should run in an init container before the API container starts, so migrations complete before the
+pod begins serving requests.
+
 #### Networking
 
 k3s ingress handles routing and TLS termination.

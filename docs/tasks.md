@@ -53,16 +53,16 @@ This is the working backlog for the BagTag MVP.
 ## Milestone 3: Database
 
 - [x] Set up PostgreSQL
-- [ ] Add Flyway
-- [ ] Create initial schema
+- [x] Add Flyway
+- [x] Create initial schema
 
 Tables:
 
-- [ ] `users`
-- [ ] `tags`
-- [ ] `scan_events`
-- [ ] `sighting_messages`
-- [ ] `magic_link_tokens`
+- [x] `users`
+- [x] `tags`
+- [x] `scan_events`
+- [x] `sighting_messages`
+- [x] `magic_link_tokens`
 
 ## Milestone 4: Authentication
 

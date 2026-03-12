@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:bagtag;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  flyway:
+    enabled: false
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-h2.sql
+
+bagtag:
+  version: 0.0.1
