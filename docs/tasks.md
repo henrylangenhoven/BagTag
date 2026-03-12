@@ -48,6 +48,7 @@ This is the working backlog for the BagTag MVP.
 - [x] Add Dockerfile
 - [x] Add checked-in OpenAPI spec
 - [x] Add `ng-openapi-gen` client generation
+- [x] Add About/status page
 
 ## Milestone 3: Database
 
