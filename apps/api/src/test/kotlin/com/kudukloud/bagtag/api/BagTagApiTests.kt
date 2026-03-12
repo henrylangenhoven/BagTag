@@ -28,6 +28,7 @@ class BagTagApiTests {
     assertNotNull(response.body)
     assertEquals("ok", response.body?.status)
     assertEquals("bagtag-api", response.body?.service)
+    assertEquals("0.0.1", response.body?.version)
   }
 
   @Test

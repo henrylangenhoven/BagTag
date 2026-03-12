@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   id("com.diffplug.spotless") version "7.2.1"
@@ -45,7 +46,7 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.0")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.2")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter")
   implementation("org.springframework.boot:spring-boot-starter-web")
@@ -67,4 +68,10 @@ tasks.named("check") { dependsOn("spotlessCheck") }
 
 if (!skipSpotlessApply) {
   tasks.named("build") { dependsOn("spotlessApply") }
+}
+
+val compileKotlin: KotlinCompile by tasks
+
+compileKotlin.compilerOptions {
+  freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
 }

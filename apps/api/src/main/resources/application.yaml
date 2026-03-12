@@ -3,6 +3,7 @@ spring:
     name: BagTag-Api
 
 bagtag:
+  version: ${BAGTAG_VERSION:0.0.1}
   auth:
     magic-link:
       base-url: ${BAGTAG_MAGIC_LINK_BASE_URL:http://localhost:4200/login}
