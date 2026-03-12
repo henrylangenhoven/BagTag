@@ -1,1 +1,63 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: light;
+  --bg: #f5eadc;
+  --bg-accent: #ead4b6;
+  --surface: rgba(255, 248, 239, 0.9);
+  --surface-strong: #fff9f1;
+  --ink: #2d2218;
+  --muted: #6b5644;
+  --line: rgba(64, 44, 20, 0.12);
+  --accent: #c96b2c;
+  --accent-deep: #8e4515;
+  --success: #2e6a4f;
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --shadow-soft: 0 24px 60px rgba(76, 48, 20, 0.12);
+  font-family: 'Instrument Sans', 'Segoe UI', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(242, 192, 120, 0.55), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(201, 107, 44, 0.22), transparent 25%),
+    linear-gradient(180deg, var(--bg) 0%, #f9f3eb 100%);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(77, 53, 32, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77, 53, 32, 0.03) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 90%);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a,
+button,
+input,
+textarea {
+  font: inherit;
+}
