@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("com.diffplug.spotless") version "7.2.1"
+  id("com.diffplug.spotless") version "8.3.0"
   kotlin("jvm") version "2.2.20"
   kotlin("plugin.spring") version "2.2.20"
   id("org.springframework.boot") version "4.0.3"
