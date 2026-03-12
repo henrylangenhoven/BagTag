@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BagTag.iml" filepath="$PROJECT_DIR$/.idea/BagTag.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bag-tag-api.iml" filepath="$PROJECT_DIR$/.idea/modules/bag-tag-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bag-tag-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/bag-tag-api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bag-tag-api.test.iml" filepath="$PROJECT_DIR$/.idea/modules/bag-tag-api.test.iml" />
     </modules>
   </component>
 </project>
