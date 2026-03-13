@@ -4,12 +4,14 @@
 
 BagTag is a self-hosted luggage tag system built around QR codes. A scanned tag should open a privacy-preserving public page where someone can report a bag's location without seeing the owner's identity, while the owner manages tags and scan history through an authenticated app.
 
-The repository is currently in the bootstrap stage. The core repo structure, docs, Angular app, Spring Boot app, Helm chart, and CI/deployment placeholders exist, but the product flows described in the architecture are not implemented yet.
+The repository now has working local auth, generated frontend API bindings, Dockerized app/runtime
+separation, and a Flyway-managed PostgreSQL schema. Tag management and public reporting flows are
+still in progress.
 
 ## Current State
 
-- `apps/web` is an Angular 21 app with the default starter screen and no feature routes yet.
-- `apps/api` is a Spring Boot 4 bootstrap app that starts successfully but does not expose BagTag-specific endpoints yet.
+- `apps/web` is an Angular 21 SPA with public, login, owner, and about routes.
+- `apps/api` is a Spring Boot 4 app with health, magic-link auth, session, profile, and Flyway-backed PostgreSQL persistence for users and magic-link tokens.
 - `deploy/` contains Helm and environment scaffolding, but the workflow and deployment scripts are still placeholders.
 - `docs/architecture.md` describes the intended product and system design.
 - `docs/tasks.md` tracks the MVP backlog.
@@ -64,12 +66,15 @@ Notes:
 - The checked-in OpenAPI document lives at `openapi/bagtag-api.json`
 - `ng-openapi-gen` generates the Angular client into `apps/web/src/app/generated/bagtag-api`
 - Frontend API integrations should use the generated client rather than hand-rolled `HttpClient` calls
+- Owner display names are editable through the owner area; when set, they take precedence over the
+  email address in the UI
 
 ### Backend
 
 Requirements:
 
 - Java 25
+- PostgreSQL
 
 Run:
 
@@ -77,6 +82,13 @@ Run:
 cd apps/api
 ./gradlew bootRun
 ```
+
+By default, the API expects PostgreSQL at `jdbc:postgresql://localhost:5432/bagtag` with
+`bagtag` / `bagtag`, and Flyway runs database migrations at application startup for local
+development.
+
+That setup is intended to work with PostgreSQL running in Docker Compose while the API itself runs
+locally from IntelliJ or the terminal on the host machine.
 
 Run tests:
 
@@ -110,6 +122,10 @@ These Docker ports intentionally do not overlap with the default local dev ports
 
 The web container proxies `/api/*` to the API container, which keeps the browser-side shape close to a future ingress setup in Kubernetes.
 
+For local Docker development, the API container runs Flyway on startup against the Compose
+PostgreSQL container. In k3s, Flyway should run in an init container before the API pod starts so
+schema changes complete before the app begins serving traffic.
+
 Optional email and magic-link configuration:
 
 ```bash
@@ -127,7 +143,7 @@ Use the code for the current truth of the project and the docs for target shape 
 - [`docs/architecture.md`](docs/architecture.md) explains the planned system, privacy model, flows, and deployment approach.
 - [`docs/tasks.md`](docs/tasks.md) is the working MVP backlog.
 
-The docs are intentionally ahead of implementation right now.
+The docs are still slightly ahead of implementation, but they now track the current auth, API-generation, and database setup closely.
 
 ## Versioning
 

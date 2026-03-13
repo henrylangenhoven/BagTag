@@ -23,6 +23,14 @@ data class SessionResponse(
     val user: AuthenticatedUser,
 )
 
+data class UpdateProfileRequest(
+    val displayName: String?,
+)
+
+data class ProfileResponse(
+    val user: AuthenticatedUser,
+)
+
 data class MeResponse(
     val authenticated: Boolean,
     val user: AuthenticatedUser?,
@@ -34,4 +42,5 @@ data class LogoutResponse(
 
 data class AuthenticatedUser(
     val email: String,
+    val displayName: String?,
 )

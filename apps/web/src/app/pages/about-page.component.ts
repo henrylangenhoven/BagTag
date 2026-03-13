@@ -1,13 +1,13 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HealthResponse } from '@bagtag-api/models';
+import { HealthControllerService } from '@bagtag-api/services';
 import webPackage from '../../../package.json';
-import { HealthResponse } from '../generated/bagtag-api/models/health-response';
-import { HealthControllerService } from '../generated/bagtag-api/services/health-controller.service';
 
 type BackendStatus = {
   loading: boolean;
   connected: boolean;
-  health: (HealthResponse & { version?: string }) | null;
+  health: HealthResponse | null;
   error: string;
 };
 
@@ -56,7 +56,7 @@ type BackendStatus = {
                 Service: <strong>{{ backendStatus().health?.service }}</strong>
               </p>
               <p>
-                Version: <strong>{{ backendStatus().health?.version ?? 'Unknown' }}</strong>
+                Version: <strong>{{ backendStatus().health?.version }}</strong>
               </p>
               <p>
                 Status: <strong>{{ backendStatus().health?.status }}</strong>
@@ -196,7 +196,7 @@ export class AboutPageComponent {
   protected readonly isBackendConnected = computed(() => this.backendStatus().connected);
   protected readonly lastCheckedAt = computed(() => {
     const timestamp = this.backendStatus().health?.timestamp;
-    return timestamp ? new Date(timestamp).toLocaleString() : 'No successful check yet';
+    return timestamp ? formatTimestamp(timestamp) : 'No successful check yet';
   });
 
   private readonly healthApi = inject(HealthControllerService);
@@ -235,4 +235,27 @@ export class AboutPageComponent {
         },
       });
   }
+}
+
+function formatTimestamp(timestamp: string): string {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) {
+    return timestamp;
+  }
+
+  const parts = new Intl.DateTimeFormat('sv-SE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+
+  const values = Object.fromEntries(
+    parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]),
+  ) as Record<string, string>;
+
+  return `${values['year']}-${values['month']}-${values['day']} ${values['hour']}:${values['minute']}:${values['second']}`;
 }

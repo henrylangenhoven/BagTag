@@ -46,12 +46,17 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation(kotlin("stdlib"))
   implementation(kotlin("reflect"))
+  implementation("org.flywaydb:flyway-core")
+  implementation("org.flywaydb:flyway-database-postgresql")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.2")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter")
+  implementation("org.springframework.boot:spring-boot-starter-jdbc")
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
+  runtimeOnly("org.postgresql:postgresql")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testRuntimeOnly("com.h2database:h2")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

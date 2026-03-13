@@ -9,25 +9,30 @@ import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthService(
+    private val authRepository: AuthRepository,
+    private val magicLinkTokenHasher: MagicLinkTokenHasher,
     private val emailSender: EmailSender,
     private val magicLinkProperties: MagicLinkProperties,
     private val clock: Clock = Clock.systemUTC(),
 ) {
-  private val pendingLinks = ConcurrentHashMap<String, PendingMagicLink>()
   private val sessions = ConcurrentHashMap<String, Session>()
 
+  @Transactional
   fun requestMagicLink(email: String): MagicLinkRequestedResponse {
     purgeExpiredLinks()
 
     val normalizedEmail = email.trim().lowercase()
+    val now = Instant.now(clock)
     val token = "ml_${UUID.randomUUID()}"
-    val expiresAt = Instant.now(clock).plus(MAGIC_LINK_TTL)
+    val expiresAt = now.plus(MAGIC_LINK_TTL)
     val magicLinkUrl = magicLinkUrl(token)
+    val user = authRepository.findOrCreateUser(normalizedEmail, now)
 
-    pendingLinks[token] = PendingMagicLink(email = normalizedEmail, expiresAt = expiresAt)
+    authRepository.storeMagicLink(user.id, magicLinkTokenHasher.hash(token), expiresAt, now)
     emailSender.sendMagicLink(normalizedEmail, magicLinkUrl)
 
     return MagicLinkRequestedResponse(
@@ -37,11 +42,19 @@ class AuthService(
     )
   }
 
+  @Transactional
   fun consumeMagicLink(token: String): SessionResponse? {
     purgeExpiredLinks()
 
-    val pending = pendingLinks.remove(token.trim()) ?: return null
-    if (pending.expiresAt.isBefore(Instant.now(clock))) {
+    val normalizedToken = token.trim()
+    val now = Instant.now(clock)
+    val pending =
+        authRepository.findActiveMagicLink(magicLinkTokenHasher.hash(normalizedToken))
+            ?: return null
+    if (pending.expiresAt.isBefore(now)) {
+      return null
+    }
+    if (!authRepository.markMagicLinkConsumed(pending.id, now)) {
       return null
     }
 
@@ -49,15 +62,18 @@ class AuthService(
     val session =
         Session(
             token = sessionToken,
+            userId = pending.userId,
             email = pending.email,
-            createdAt = Instant.now(clock),
+            displayName = pending.displayName,
+            createdAt = now,
         )
 
     sessions[sessionToken] = session
+    authRepository.touchUserLastLogin(pending.userId, now)
 
     return SessionResponse(
         sessionToken = sessionToken,
-        user = AuthenticatedUser(email = session.email),
+        user = session.toAuthenticatedUser(),
     )
   }
 
@@ -66,8 +82,26 @@ class AuthService(
     return if (session == null) {
       MeResponse(authenticated = false, user = null)
     } else {
-      MeResponse(authenticated = true, user = AuthenticatedUser(email = session.email))
+      val user =
+          authRepository.findUserById(session.userId)
+              ?: return MeResponse(authenticated = false, user = null)
+      val refreshedSession = session.copy(email = user.email, displayName = user.displayName)
+      sessions[session.token] = refreshedSession
+      MeResponse(authenticated = true, user = refreshedSession.toAuthenticatedUser())
     }
+  }
+
+  @Transactional
+  fun updateProfile(sessionToken: String?, displayName: String?): ProfileResponse? {
+    val session =
+        sessionToken?.trim()?.takeIf { it.isNotEmpty() }?.let(sessions::get) ?: return null
+    val normalizedDisplayName = displayName?.trim()?.takeIf { it.isNotEmpty() }
+    authRepository.updateUserDisplayName(session.userId, normalizedDisplayName)
+    val updatedUser = authRepository.findUserById(session.userId) ?: return null
+    val updatedSession =
+        session.copy(email = updatedUser.email, displayName = updatedUser.displayName)
+    sessions[session.token] = updatedSession
+    return ProfileResponse(user = updatedSession.toAuthenticatedUser())
   }
 
   fun logout(sessionToken: String?): LogoutResponse {
@@ -76,8 +110,7 @@ class AuthService(
   }
 
   private fun purgeExpiredLinks() {
-    val now = Instant.now(clock)
-    pendingLinks.entries.removeIf { (_, link) -> link.expiresAt.isBefore(now) }
+    authRepository.purgeExpiredMagicLinks(Instant.now(clock))
   }
 
   private fun magicLinkUrl(token: String): String {
@@ -99,13 +132,17 @@ class AuthService(
   }
 }
 
-private data class PendingMagicLink(
-    val email: String,
-    val expiresAt: Instant,
-)
-
 private data class Session(
     val token: String,
+    val userId: UUID,
     val email: String,
+    val displayName: String?,
     val createdAt: Instant,
 )
+
+private fun Session.toAuthenticatedUser(): AuthenticatedUser {
+  return AuthenticatedUser(
+      email = email,
+      displayName = displayName,
+  )
+}

@@ -66,6 +66,9 @@ Kotlin Spring Boot application responsible for:
 
 Session-based authentication is used after magic-link login.
 
+Owner profiles may store an optional `display_name`. When present, the frontend should use it as
+the primary owner label and fall back to the email address when it is absent.
+
 #### Database
 
 PostgreSQL stores:
@@ -77,6 +80,10 @@ PostgreSQL stores:
 - magic-link tokens
 
 Schema changes are managed using Flyway.
+
+For local development, Flyway may run at API application startup. For k3s deployments, Flyway
+should run in an init container before the API container starts, so migrations complete before the
+pod begins serving requests.
 
 #### Networking
 
@@ -159,7 +166,7 @@ bagtag/
 
 ## Backend Structure
 
-Feature-oriented structure under `apps/api/src/main/kotlin/com/bagtag/`:
+Feature-oriented structure under `apps/api/src/main/kotlin/com/kudukloud/bagtag/api/`:
 
 ```text
 common/
@@ -195,6 +202,7 @@ signals where appropriate instead of ad hoc HTTP calls.
 
 - `id`
 - `email`
+- `display_name`
 - `created_at`
 - `last_login_at`
 
@@ -288,6 +296,9 @@ MVP controls:
 
 - `POST /api/auth/magic-link/request`
 - `POST /api/auth/magic-link/consume`
+- `POST /api/auth/profile`
+- `GET /api/auth/me`
+- `POST /api/auth/logout`
 - `POST /api/auth/logout`
 - `GET /api/auth/me`
 

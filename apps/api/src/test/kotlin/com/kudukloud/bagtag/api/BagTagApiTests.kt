@@ -4,7 +4,9 @@ import com.kudukloud.bagtag.api.auth.MagicLinkConsumeRequest
 import com.kudukloud.bagtag.api.auth.MagicLinkRequest
 import com.kudukloud.bagtag.api.auth.MagicLinkRequestedResponse
 import com.kudukloud.bagtag.api.auth.MeResponse
+import com.kudukloud.bagtag.api.auth.ProfileResponse
 import com.kudukloud.bagtag.api.auth.SessionResponse
+import com.kudukloud.bagtag.api.auth.UpdateProfileRequest
 import com.kudukloud.bagtag.api.common.HealthResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -58,6 +60,20 @@ class BagTagApiTests {
     assertEquals(HttpStatus.OK, consumeResponse.statusCode)
     val sessionBody = consumeResponse.body ?: error("Missing session response")
     assertEquals("owner@example.com", sessionBody.user.email)
+    assertEquals(null, sessionBody.user.displayName)
+
+    val profileResponse =
+        restClient()
+            .post()
+            .uri("/api/auth/profile")
+            .header("X-BagTag-Session", sessionBody.sessionToken)
+            .body(UpdateProfileRequest(displayName = "Henry"))
+            .retrieve()
+            .toEntity(ProfileResponse::class.java)
+
+    assertEquals(HttpStatus.OK, profileResponse.statusCode)
+    val profileBody = profileResponse.body ?: error("Missing profile response")
+    assertEquals("Henry", profileBody.user.displayName)
 
     val meResponse =
         restClient()
@@ -71,6 +87,7 @@ class BagTagApiTests {
     val meBody = meResponse.body ?: error("Missing me response")
     assertTrue(meBody.authenticated)
     assertEquals("owner@example.com", meBody.user?.email)
+    assertEquals("Henry", meBody.user?.displayName)
   }
 
   private fun restClient(): RestClient {

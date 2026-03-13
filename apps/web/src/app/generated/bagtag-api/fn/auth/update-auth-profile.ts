@@ -7,29 +7,32 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { LogoutResponse } from '../../models/logout-response';
+import { ProfileResponse } from '../../models/profile-response';
+import { UpdateProfileRequest } from '../../models/update-profile-request';
 
-export interface LogoutAuthSession$Params {
+export interface UpdateAuthProfile$Params {
   'X-BagTag-Session'?: string;
+  body: UpdateProfileRequest;
 }
 
-export function logoutAuthSession(
+export function updateAuthProfile(
   http: HttpClient,
   rootUrl: string,
-  params?: LogoutAuthSession$Params,
+  params: UpdateAuthProfile$Params,
   context?: HttpContext,
-): Observable<StrictHttpResponse<LogoutResponse>> {
-  const rb = new RequestBuilder(rootUrl, logoutAuthSession.PATH, 'post');
+): Observable<StrictHttpResponse<ProfileResponse>> {
+  const rb = new RequestBuilder(rootUrl, updateAuthProfile.PATH, 'post');
   if (params) {
     rb.header('X-BagTag-Session', params['X-BagTag-Session'], {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(rb.build({ responseType: 'json', accept: 'application/json', context })).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<LogoutResponse>;
+      return r as StrictHttpResponse<ProfileResponse>;
     }),
   );
 }
 
-logoutAuthSession.PATH = '/api/auth/logout';
+updateAuthProfile.PATH = '/api/auth/profile';
