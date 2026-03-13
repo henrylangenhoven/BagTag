@@ -7,9 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "api:fetch": "node scripts/fetch-openapi.mjs",
-    "api:generate": "ng-openapi-gen -c ng-openapi-gen.json",
-    "api:sync": "npm run api:fetch && npm run api:generate && prettier --write .",
+    "api:fetch": "node scripts/fetch-openapi.mjs && prettier --write ../../openapi/bagtag-api.json",
+    "api:generate": "ng-openapi-gen -c ng-openapi-gen.json && prettier --write \"src/app/generated/bagtag-api/**/*.ts\"",
+    "api:sync": "npm run api:fetch && npm run api:generate",
     "prepare": "cd ../.. && apps/web/node_modules/.bin/husky .husky"
   },
   "private": true,
