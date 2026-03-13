@@ -61,11 +61,6 @@ sync_files() {
   validate_version "$version"
 
   replace_first_match \
-    "$ROOT_DIR/apps/api/build.gradle.kts" \
-    'version = "[^"]+"' \
-    "version = \"$version\""
-
-  replace_first_match \
     "$ROOT_DIR/apps/web/package.json" \
     '"version": "[^"]+"' \
     "\"version\": \"$version\""
@@ -94,6 +89,16 @@ sync_files() {
     "$ROOT_DIR/deploy/helm/bagtag/values.yaml" \
     'tag: [^\n]+' \
     "tag: $version"
+
+  replace_first_match \
+    "$ROOT_DIR/apps/api/src/main/resources/application.yaml" \
+    'version: \$\{BAGTAG_VERSION:[^}]+\}' \
+    'version: \${BAGTAG_VERSION:'"$version"'}'
+
+  replace_first_match \
+    "$ROOT_DIR/apps/api/src/test/resources/application.yaml" \
+    'version: [^\n]+' \
+    "version: $version"
 
   echo "$version"
 }

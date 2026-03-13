@@ -2,16 +2,16 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("com.diffplug.spotless") version "8.3.0"
-  kotlin("jvm") version "2.2.20"
-  kotlin("plugin.spring") version "2.3.10"
-  id("org.springframework.boot") version "4.0.3"
-  id("io.spring.dependency-management") version "1.1.7"
+  id("com.diffplug.spotless")
+  kotlin("jvm")
+  kotlin("plugin.spring")
+  id("org.springframework.boot")
+  id("io.spring.dependency-management")
 }
 
 group = "com.kudukloud"
 
-version = "0.0.1"
+version = file("../../VERSION").readText().trim()
 
 description = "BagTag Api"
 
