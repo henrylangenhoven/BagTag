@@ -13,6 +13,9 @@ class NoOpEmailSender : EmailSender {
 
   override fun sendMagicLink(email: String, magicLinkUrl: String) {
     logger.info(
-        "Resend is not configured. Magic link for {} is available at {}", email, magicLinkUrl)
+        "Resend is not configured. Magic link for {} is available at {}",
+        email,
+        magicLinkUrl,
+    )
   }
 }

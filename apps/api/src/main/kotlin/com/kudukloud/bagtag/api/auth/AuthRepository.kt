@@ -33,7 +33,8 @@ class AuthRepository(
               insert into users (id, email, display_name, created_at)
               values (:id, :email, :displayName, :createdAt)
               """
-                  .trimIndent())
+                  .trimIndent()
+          )
           .param("id", user.id)
           .param("email", user.email)
           .param("displayName", user.displayName)
@@ -53,7 +54,8 @@ class AuthRepository(
             insert into magic_link_tokens (id, user_id, token_hash, expires_at, created_at)
             values (?, ?, ?, ?, ?)
             """
-                .trimIndent())
+                .trimIndent()
+        )
         .params(UUID.randomUUID(), userId, tokenHash, timestamp(expiresAt), timestamp(now))
         .update()
   }
@@ -75,7 +77,8 @@ class AuthRepository(
             where t.token_hash = ?
               and t.consumed_at is null
             """
-                .trimIndent())
+                .trimIndent()
+        )
         .param(tokenHash)
         .query(::mapMagicLinkToken)
         .optional()
@@ -92,7 +95,8 @@ class AuthRepository(
                 where id = ?
                   and consumed_at is null
                 """
-                    .trimIndent())
+                    .trimIndent()
+            )
             .params(timestamp(consumedAt), id)
             .update()
 
@@ -107,7 +111,8 @@ class AuthRepository(
             set last_login_at = ?
             where id = ?
             """
-                .trimIndent())
+                .trimIndent()
+        )
         .params(timestamp(lastLoginAt), userId)
         .update()
   }
@@ -120,7 +125,8 @@ class AuthRepository(
             set display_name = :displayName
             where id = :id
             """
-                .trimIndent())
+                .trimIndent()
+        )
         .param("displayName", displayName)
         .param("id", userId)
         .update()
@@ -133,7 +139,8 @@ class AuthRepository(
             delete from magic_link_tokens
             where expires_at < ?
             """
-                .trimIndent())
+                .trimIndent()
+        )
         .param(timestamp(now))
         .update()
   }
@@ -146,7 +153,8 @@ class AuthRepository(
             from users
             where email = ?
             """
-                .trimIndent())
+                .trimIndent()
+        )
         .param(email)
         .query(::mapUser)
         .optional()
@@ -161,7 +169,8 @@ class AuthRepository(
             from users
             where id = ?
             """
-                .trimIndent())
+                .trimIndent()
+        )
         .param(id)
         .query(::mapUser)
         .optional()

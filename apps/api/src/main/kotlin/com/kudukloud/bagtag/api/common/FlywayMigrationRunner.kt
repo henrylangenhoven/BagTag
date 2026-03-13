@@ -11,7 +11,10 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConditionalOnProperty(
-    name = ["spring.flyway.enabled"], havingValue = "true", matchIfMissing = true)
+    name = ["spring.flyway.enabled"],
+    havingValue = "true",
+    matchIfMissing = true,
+)
 class FlywayMigrationRunner(
     private val dataSource: DataSource,
 ) : ApplicationRunner {
