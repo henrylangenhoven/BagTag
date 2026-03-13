@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { catchError, of, tap, throwError } from 'rxjs';
-import { MeResponse } from '../../generated/bagtag-api/models/me-response';
-import { AuthService } from '../../generated/bagtag-api/services/auth.service';
+import { MeResponse } from '../../generated/bagtag-api/models';
+import { AuthService } from '../../generated/bagtag-api/services';
 import { SessionService } from './session.service';
 
 type RequestState = {
