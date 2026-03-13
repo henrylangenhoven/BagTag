@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   id("com.diffplug.spotless") version "8.3.0"
-  kotlin("jvm") version "2.2.20"
+  kotlin("jvm") version "2.3.10"
   kotlin("plugin.spring") version "2.2.20"
   id("org.springframework.boot") version "4.0.3"
   id("io.spring.dependency-management") version "1.1.7"
