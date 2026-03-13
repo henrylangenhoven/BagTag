@@ -1,8 +1,8 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HealthResponse } from '@bagtag-api/models';
+import { HealthControllerService } from '@bagtag-api/services';
 import webPackage from '../../../package.json';
-import { HealthResponse } from '../generated/bagtag-api/models';
-import { HealthControllerService } from '../generated/bagtag-api/services';
 
 type BackendStatus = {
   loading: boolean;

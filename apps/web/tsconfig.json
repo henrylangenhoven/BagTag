@@ -3,6 +3,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@bagtag-api": ["src/app/generated/bagtag-api/api"],
+      "@bagtag-api/*": ["src/app/generated/bagtag-api/*"]
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
