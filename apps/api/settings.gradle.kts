@@ -1,6 +1,6 @@
 pluginManagement {
   val kotlinVersion = "2.3.10"
-  val springBootVersion = "4.0.3"
+  val springBootVersion = "4.0.4"
   val dependencyManagementVersion = "1.1.7"
   val spotlessVersion = "8.3.0"
 
