@@ -1,0 +1,5 @@
+ingress:
+  host: bagtag.kudukloud.com
+
+api:
+  magicLinkBaseUrl: https://bagtag.kudukloud.com/login

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "bagtag.fullname" . }}-config
+  labels:
+    {{- include "bagtag.labels" . | nindent 4 }}
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://{{ include "bagtag.databaseHost" . }}:{{ if .Values.postgres.enabled }}{{ .Values.postgres.service.port }}{{ else }}{{ .Values.externalDatabase.port }}{{ end }}/{{ include "bagtag.databaseName" . }}
+  SPRING_DATASOURCE_USERNAME: {{ include "bagtag.databaseUser" . | quote }}
+  BAGTAG_MAGIC_LINK_BASE_URL: {{ include "bagtag.magicLinkBaseUrl" . | quote }}
+  BAGTAG_VERSION: {{ .Chart.AppVersion | quote }}
+  RESEND_FROM_EMAIL: {{ .Values.api.resend.fromEmail | quote }}
+  RESEND_FROM_NAME: {{ .Values.api.resend.fromName | quote }}
+  RESEND_REPLY_TO: {{ .Values.api.resend.replyTo | quote }}

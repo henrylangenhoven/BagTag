@@ -27,7 +27,7 @@ This is the working backlog for the BagTag MVP.
 - [x] Add `.gitignore`
 - [x] Add `.editorconfig`
 - [x] Add `Makefile`
-- [ ] Configure container registry
+- [~] Configure container registry
 
 ## Milestone 1: Backend Bootstrap
 
@@ -105,17 +105,34 @@ Tables:
 
 ## Milestone 9: CI
 
-- [ ] Backend build workflow
-- [ ] Frontend build workflow
-- [~] Container builds
-- [ ] Push images to registry
+- [x] Backend build workflow
+- [x] Frontend build workflow
+- [x] Container builds
+- [x] Push images to registry
+- [ ] Configure GHCR package visibility and pull credentials
+- [ ] Verify preview image retention keeps only 3 `pr-<number>-sha-*` versions per app
 
 ## Milestone 10: Preview Environments
 
-- [ ] Helm chart
-- [ ] Preview deploy workflow
-- [ ] Preview cleanup workflow
+- [x] Helm chart
+- [x] Preview deploy workflow
+- [x] Preview cleanup workflow
 - [ ] PR preview URL comment
+- [ ] Add repo/org variables and secrets for preview deploys:
+  - `PREVIEW_BASE_DOMAIN`
+  - `KUBE_CONFIG`
+  - `GHCR_PULL_USERNAME`
+  - `GHCR_PULL_TOKEN`
+  - optional Resend and ingress settings
+- [ ] Create a dedicated k3s deploy identity and generate a non-local kubeconfig
+- [ ] Replace `127.0.0.1` kubeconfig server with the externally reachable k3s API endpoint
+- [ ] Verify the k3s API is reachable from GitHub Actions on port `6443`
+- [ ] Run the first PR end-to-end and confirm:
+  - namespace `bagtag-pr-<number>` is created
+  - Helm release deploys successfully
+  - GHCR images pull successfully inside the cluster
+  - preview namespace is deleted on PR close
+  - preview image packages are deleted on PR close
 
 ## Milestone 11: Production Deployment
 

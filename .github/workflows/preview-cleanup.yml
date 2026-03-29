@@ -1,0 +1,92 @@
+name: Preview Cleanup
+
+on:
+  pull_request:
+    types:
+      - closed
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  destroy-preview-environment:
+    name: Destroy preview environment
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Write kubeconfig
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          umask 077
+          printf '%s' "$KUBE_CONFIG_DATA" > "$RUNNER_TEMP/kubeconfig"
+          echo "KUBECONFIG=$RUNNER_TEMP/kubeconfig" >> "$GITHUB_ENV"
+
+      - name: Make preview destroy script executable
+        run: chmod +x deploy/scripts/destroy-preview.sh
+
+      - name: Delete preview namespace
+        run: ./deploy/scripts/destroy-preview.sh
+
+  delete-preview-images:
+    name: Delete preview images
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        package_name:
+          - bagtag-api-preview
+          - bagtag-web-preview
+    steps:
+      - name: Delete all preview image versions for this PR
+        uses: actions/github-script@v7
+        env:
+          OWNER: ${{ github.repository_owner }}
+          OWNER_TYPE: ${{ github.event.repository.owner.type }}
+          PACKAGE_NAME: ${{ matrix.package_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          script: |
+            const owner = process.env.OWNER;
+            const ownerType = process.env.OWNER_TYPE;
+            const packageName = process.env.PACKAGE_NAME;
+            const prNumber = process.env.PR_NUMBER;
+            const tagPrefix = `pr-${prNumber}`;
+            const listRoute = ownerType === "Organization"
+              ? "GET /orgs/{org}/packages/{package_type}/{package_name}/versions"
+              : "GET /users/{username}/packages/{package_type}/{package_name}/versions";
+            const listParams = ownerType === "Organization"
+              ? { org: owner, package_type: "container", package_name: packageName, per_page: 100 }
+              : { username: owner, package_type: "container", package_name: packageName, per_page: 100 };
+            const versions = await github.paginate(listRoute, listParams);
+            const versionsToDelete = versions.filter((version) => {
+              const tags = version.metadata?.container?.tags ?? [];
+              return tags.some((tag) => tag === tagPrefix || tag.startsWith(`${tagPrefix}-sha-`));
+            });
+
+            if (versionsToDelete.length === 0) {
+              core.info(`No preview versions found for ${packageName}.`);
+              return;
+            }
+
+            const deleteRoute = ownerType === "Organization"
+              ? "DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}"
+              : "DELETE /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}";
+
+            for (const version of versionsToDelete) {
+              const deleteParams = ownerType === "Organization"
+                ? { org: owner, package_type: "container", package_name: packageName, package_version_id: version.id }
+                : { username: owner, package_type: "container", package_name: packageName, package_version_id: version.id };
+              await github.request(deleteRoute, deleteParams);
+              core.info(`Deleted ${packageName} version ${version.id}.`);
+            }

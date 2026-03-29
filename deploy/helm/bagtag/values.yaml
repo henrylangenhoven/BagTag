@@ -1,6 +1,65 @@
-image:
-  repository: ghcr.io/your-org/bagtag
-  tag: 0.0.1
+nameOverride: ""
+fullnameOverride: ""
 
-service:
-  port: 80
+imagePullSecrets: []
+
+web:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/your-org/bagtag-web
+    tag: 0.0.1
+    pullPolicy: IfNotPresent
+  service:
+    name: web
+    port: 80
+  resources: {}
+
+api:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/your-org/bagtag-api
+    tag: 0.0.1
+    pullPolicy: IfNotPresent
+  service:
+    name: api
+    port: 8080
+  magicLinkBaseUrl: ""
+  resend:
+    fromEmail: onboarding@resend.dev
+    fromName: BagTag
+    replyTo: ""
+    apiKey: ""
+  resources: {}
+
+postgres:
+  enabled: true
+  image:
+    repository: postgres
+    tag: 17-alpine
+    pullPolicy: IfNotPresent
+  service:
+    name: postgres
+    port: 5432
+  auth:
+    database: bagtag
+    username: bagtag
+    password: bagtag
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: ""
+  resources: {}
+
+externalDatabase:
+  host: ""
+  port: 5432
+  database: bagtag
+  username: bagtag
+  password: ""
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  host: bagtag.example.com
+  tls: []

@@ -87,8 +87,13 @@ sync_files() {
 
   replace_first_match \
     "$ROOT_DIR/deploy/helm/bagtag/values.yaml" \
-    'tag: [^\n]+' \
-    "tag: $version"
+    '((?:web:\n  replicaCount: [^\n]+\n  image:\n    repository: [^\n]+\n    )tag: )[^\n]+' \
+    "\$1$version"
+
+  replace_first_match \
+    "$ROOT_DIR/deploy/helm/bagtag/values.yaml" \
+    '((?:api:\n  replicaCount: [^\n]+\n  image:\n    repository: [^\n]+\n    )tag: )[^\n]+' \
+    "\$1$version"
 
   replace_first_match \
     "$ROOT_DIR/apps/api/src/main/resources/application.yaml" \
