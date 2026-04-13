@@ -48,7 +48,7 @@ dependencies {
   implementation(kotlin("reflect"))
   implementation("org.flywaydb:flyway-core")
   implementation("org.flywaydb:flyway-database-postgresql")
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.2")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.3")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.boot:spring-boot-starter")
   implementation("org.springframework.boot:spring-boot-starter-jdbc")
